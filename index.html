@@ -3,8 +3,18 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="funsite.online — SharonLee 的作品展示" />
-  <title>funsite.online · 作品集</title>
+  <script>
+    (function () {
+      if (location.protocol !== "http:") return;
+      var h = location.hostname;
+      if (h === "localhost" || h === "127.0.0.1" || h === "[::1]") return;
+      location.replace(
+        "https://" + location.host + location.pathname + location.search + location.hash
+      );
+    })();
+  </script>
+  <meta name="description" content="funsite.online 个人站点：热爱创造热爱。汇集原创小作品与资讯入口，含 Fear and Dreams 主题共鸣测试等链接。" />
+  <title>funsite.online · 个人站点</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Noto+Sans+SC:wght@400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet" />
@@ -589,7 +599,7 @@
     <header class="hero">
       <p class="hero-badge"><span class="dot" aria-hidden="true"></span> 欢迎来访</p>
       <h1>funsite.online</h1>
-      <p class="hero-tagline">SharonLee · 热爱创造热爱</p>
+      <p class="hero-tagline">热爱创造热爱</p>
       <nav class="social" aria-label="社交媒体">
         <!-- 将 # 替换为个人主页链接 -->
         <a href="#" target="_blank" rel="noopener noreferrer" aria-label="小红书 No, but?">
@@ -615,10 +625,10 @@
 
     <section class="works" aria-label="作品">
       <div class="card-grid">
-        <a class="card" href="https://fndsquiz.funsite.online/">
+        <a class="card" href="https://fndsquiz.funsite.online">
           <div class="card-inner">
             <h3>共鸣测试 · Fear and Dreams</h3>
-            <p>以 Fear and Dreams 为序，解锁你的人格底色，看见怯懦与浪漫、挣扎与理想。</p>
+            <p>感谢永远有歌把心境道破</p>
             <span class="card-arrow">
               进入
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
