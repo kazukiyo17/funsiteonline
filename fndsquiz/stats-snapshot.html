@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>共鸣测试 · Fear and Dreams</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <meta name="theme-color" content="#0a0812" />
+  <style>
+    :root {
+      --bg: #050508;
+      --text: rgba(255, 255, 255, 0.94);
+      --muted: rgba(255, 255, 255, 0.58);
+      --line: rgba(255, 255, 255, 0.12);
+      --card: rgba(20, 16, 28, 0.72);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100dvh;
+      background: var(--bg);
+      background-image: radial-gradient(ellipse 90% 70% at 50% 0%, #1a1025 0%, var(--bg) 55%);
+      color: var(--text);
+      font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .shell {
+      max-width: min(24rem, 100%);
+      margin: 0 auto;
+      padding: 1.5rem 1.15rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .snap-head {
+      text-align: center;
+      margin-bottom: 1.25rem;
+      width: 100%;
+    }
+
+    .snap-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      color: rgba(255, 255, 255, 0.42);
+      text-transform: uppercase;
+      margin-bottom: 0.35rem;
+    }
+
+    .snap-title {
+      font-size: clamp(1.1rem, 3.5vw, 1.35rem);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.35rem;
+    }
+
+    .snap-caption {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .snap-legend-wrap {
+      width: 100%;
+      max-width: 320px;
+      margin-top: 1rem;
+    }
+
+    .snap-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 0.38rem;
+      max-height: min(55vh, 28rem);
+      overflow-y: auto;
+      padding-right: 0.25rem;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(192, 132, 252, 0.35) transparent;
+    }
+
+    .snap-legend::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .snap-legend::-webkit-scrollbar-thumb {
+      background: rgba(192, 132, 252, 0.35);
+      border-radius: 3px;
+    }
+
+    .snap-legend-row {
+      display: grid;
+      grid-template-columns: 11px minmax(0, 1fr) auto;
+      gap: 0.45rem 0.5rem;
+      align-items: center;
+      font-size: 0.78rem;
+    }
+
+    @media (min-width: 480px) {
+      .snap-legend-row {
+        font-size: 0.82rem;
+      }
+    }
+
+    .snap-legend-row__dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .snap-legend-row__name {
+      min-width: 0;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .snap-legend-row__pct {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .snap-card {
+      width: 100%;
+      max-width: 320px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      padding: 1.35rem 1rem 1.5rem;
+      box-shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.55);
+      display: flex;
+      justify-content: center;
+    }
+
+    .pie-svg {
+      display: block;
+      width: 100%;
+      max-width: 280px;
+      height: auto;
+      aspect-ratio: 1;
+    }
+
+    .pie-svg text {
+      font-family: "Noto Sans SC", sans-serif;
+    }
+
+    .snap-foot {
+      margin-top: 1.35rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .snap-foot a {
+      color: rgba(192, 132, 252, 0.9);
+      text-decoration: none;
+    }
+
+    .snap-foot a:hover {
+      color: #e9d5ff;
+      text-decoration: underline;
+    }
+
+    .snap-err {
+      text-align: center;
+      color: #fda4af;
+      font-size: 0.9rem;
+      padding: 2rem 1rem;
+      max-width: 24rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell" id="shell">
+    <header class="snap-head">
+      <p class="snap-eyebrow">Fear &amp; Dreams</p>
+      <h1 class="snap-title" id="snap-title">同频测试结果</h1>
+      <p class="snap-caption" id="snap-caption">加载中…</p>
+    </header>
+    <div class="snap-card">
+      <svg class="pie-svg" id="chart-pie" viewBox="0 0 280 280" role="img" aria-label="各单曲占比"></svg>
+    </div>
+    <div class="snap-legend-wrap">
+      <div class="snap-legend" id="snap-legend" role="list" aria-label="各曲目名称与占比"></div>
+    </div>
+    <p class="snap-foot"><a href="quiz.html">进入测试</a></p>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var DATA_URL = "stats-snapshot.json";
+
+      var elTitle = document.getElementById("snap-title");
+      var elCaption = document.getElementById("snap-caption");
+      var elPie = document.getElementById("chart-pie");
+      var elLegend = document.getElementById("snap-legend");
+      var elShell = document.getElementById("shell");
+
+      function fail(msg) {
+        elShell.innerHTML = '<p class="snap-err" role="alert">' + msg + "</p>";
+      }
+
+      function normalizeRows(raw) {
+        var rows = [];
+        var list = Array.isArray(raw.byResult) ? raw.byResult : [];
+        for (var i = 0; i < list.length; i++) {
+          var r = list[i];
+          rows.push({
+            slug: r.slug != null ? String(r.slug) : "s" + (i + 1),
+            title: r.title != null ? String(r.title) : "",
+            count: Math.max(0, Number(r.count) || 0),
+            percent: r.percent != null && r.percent !== "" ? Number(r.percent) : null
+          });
+        }
+        var sum = Number(raw.sumResult);
+        if (!isFinite(sum) || sum < 1) {
+          sum = 0;
+          for (var j = 0; j < rows.length; j++) sum += rows[j].count;
+        }
+        for (var k = 0; k < rows.length; k++) {
+          if (rows[k].percent == null || !isFinite(rows[k].percent)) {
+            rows[k].percent = sum > 0 ? Math.round((rows[k].count / sum) * 1000) / 10 : 0;
+          }
+        }
+        return { rows: rows, sum: sum };
+      }
+
+      function colorForSlug(slug) {
+        var n = parseInt(String(slug).replace(/^s/, ""), 10);
+        if (!isFinite(n) || n < 1) n = 1;
+        var h = ((n - 1) * 47 + 278) % 360;
+        var l = 52 + ((n - 1) % 4) * 4;
+        return "hsl(" + h + ", 58%, " + l + "%)";
+      }
+
+      function donutSlicePath(cx, cy, r0, r1, a0, a1) {
+        var x0o = cx + r0 * Math.cos(a0);
+        var y0o = cy + r0 * Math.sin(a0);
+        var x1o = cx + r0 * Math.cos(a1);
+        var y1o = cy + r0 * Math.sin(a1);
+        var x0i = cx + r1 * Math.cos(a1);
+        var y0i = cy + r1 * Math.sin(a1);
+        var x1i = cx + r1 * Math.cos(a0);
+        var y1i = cy + r1 * Math.sin(a0);
+        var large = a1 - a0 > Math.PI ? 1 : 0;
+        return (
+          "M " +
+          x0o +
+          " " +
+          y0o +
+          " A " +
+          r0 +
+          " " +
+          r0 +
+          " 0 " +
+          large +
+          " 1 " +
+          x1o +
+          " " +
+          y1o +
+          " L " +
+          x0i +
+          " " +
+          y0i +
+          " A " +
+          r1 +
+          " " +
+          r1 +
+          " 0 " +
+          large +
+          " 0 " +
+          x1i +
+          " " +
+          y1i +
+          " Z"
+        );
+      }
+
+      function drawPieChart(svg, rows, sum) {
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+        var ns = "http://www.w3.org/2000/svg";
+        var cx = 140;
+        var cy = 140;
+        var rOut = 118;
+        var rIn = 64;
+
+        if (!sum || sum < 1) {
+          var empty = document.createElementNS(ns, "text");
+          empty.setAttribute("x", "140");
+          empty.setAttribute("y", "142");
+          empty.setAttribute("text-anchor", "middle");
+          empty.setAttribute("fill", "rgba(255,255,255,0.35)");
+          empty.setAttribute("font-size", "13");
+          empty.textContent = "暂无数据";
+          svg.appendChild(empty);
+          return;
+        }
+
+        var angle = -Math.PI / 2;
+        for (var i = 0; i < rows.length; i++) {
+          var row = rows[i];
+          var c = row.count;
+          if (!c) continue;
+          var da = (c / sum) * 2 * Math.PI;
+          var a0 = angle;
+          var a1 = angle + da;
+          angle = a1;
+
+          var path = document.createElementNS(ns, "path");
+          path.setAttribute("d", donutSlicePath(cx, cy, rOut, rIn, a0, a1));
+          path.setAttribute("fill", colorForSlug(row.slug));
+          path.setAttribute("stroke", "rgba(5,5,8,0.85)");
+          path.setAttribute("stroke-width", "1.25");
+          path.setAttribute("stroke-linejoin", "round");
+          var pctStr =
+            row.percent < 10 && row.percent > 0 ? row.percent.toFixed(1) : String(Math.round(row.percent));
+          var hint = document.createElementNS(ns, "title");
+          hint.textContent = row.title + " · " + c + " · " + pctStr + "%";
+          path.appendChild(hint);
+          svg.appendChild(path);
+        }
+
+        var holeNum = document.createElementNS(ns, "text");
+        holeNum.setAttribute("x", "140");
+        holeNum.setAttribute("y", "134");
+        holeNum.setAttribute("text-anchor", "middle");
+        holeNum.setAttribute("fill", "rgba(255,255,255,0.88)");
+        holeNum.setAttribute("font-size", "17");
+        holeNum.setAttribute("font-weight", "600");
+        holeNum.textContent = String(sum);
+        svg.appendChild(holeNum);
+
+        var holeLab = document.createElementNS(ns, "text");
+        holeLab.setAttribute("x", "140");
+        holeLab.setAttribute("y", "154");
+        holeLab.setAttribute("text-anchor", "middle");
+        holeLab.setAttribute("fill", "rgba(255,255,255,0.38)");
+        holeLab.setAttribute("font-size", "10");
+        holeLab.textContent = "总计";
+        svg.appendChild(holeLab);
+      }
+
+      function formatPercent(pct) {
+        if (!isFinite(pct) || pct <= 0) return "0%";
+        return (pct < 10 ? pct.toFixed(1) : String(Math.round(pct))) + "%";
+      }
+
+      function renderLegend(container, rows, sum) {
+        if (!container) return;
+        container.innerHTML = "";
+        var sorted = rows.slice().sort(function (a, b) {
+          return b.count - a.count;
+        });
+        for (var r = 0; r < sorted.length; r++) {
+          var row = sorted[r];
+          var pct = sum > 0 ? row.percent : 0;
+          var wrap = document.createElement("div");
+          wrap.className = "snap-legend-row";
+          wrap.setAttribute("role", "listitem");
+          var dot = document.createElement("div");
+          dot.className = "snap-legend-row__dot";
+          dot.style.background =
+            row.count > 0 ? colorForSlug(row.slug) : "rgba(255,255,255,0.12)";
+          var name = document.createElement("div");
+          name.className = "snap-legend-row__name";
+          name.textContent = row.title;
+          name.title = row.title;
+          var pEl = document.createElement("div");
+          pEl.className = "snap-legend-row__pct";
+          pEl.textContent = formatPercent(pct);
+          wrap.appendChild(dot);
+          wrap.appendChild(name);
+          wrap.appendChild(pEl);
+          container.appendChild(wrap);
+        }
+      }
+
+      function applySnapshot(raw) {
+        if (!raw || typeof raw !== "object") throw new Error("invalid");
+        if (elTitle && raw.title) elTitle.textContent = raw.title;
+        if (elCaption) elCaption.textContent = raw.caption || "";
+        var norm = normalizeRows(raw);
+        drawPieChart(elPie, norm.rows, norm.sum);
+        renderLegend(elLegend, norm.rows, norm.sum);
+      }
+
+      fetch(DATA_URL, { credentials: "same-origin" })
+        .then(function (res) {
+          if (!res.ok) throw new Error("http");
+          return res.text();
+        })
+        .then(function (text) {
+          var data;
+          try {
+            data = JSON.parse(text);
+          } catch (e) {
+            throw new Error("parse");
+          }
+          applySnapshot(data);
+        })
+        .catch(function (err) {
+          if (err && err.message === "parse") {
+            fail("<strong>stats-snapshot.json</strong> 不是合法 JSON，请检查语法。");
+            return;
+          }
+          fail(
+            "无法加载 <strong>stats-snapshot.json</strong>。请用 HTTP 访问本站（例如在 <code>fndsquiz</code> 目录执行 <code>npx serve</code>），勿用 file://；并确认配置文件与本页同级。"
+          );
+        });
+    })();
+  </script>
+</body>
+</html>

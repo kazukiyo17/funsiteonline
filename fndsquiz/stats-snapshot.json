@@ -1,0 +1,27 @@
+{
+  "title": "同频测试结果",
+  "caption": "更新时间 · 2026-04-30",
+  "sumResult": 8594,
+  "byResult": [
+    { "slug": "s11", "title": "告别娑婆", "count": 1199 },
+    { "slug": "s14", "title": "任我行", "count": 1160 },
+    { "slug": "s13", "title": "好久不见", "count": 1156 },
+    { "slug": "s12", "title": "完", "count": 1144 },
+    { "slug": "s17", "title": "人生马拉松", "count": 448 },
+    { "slug": "s01", "title": "2001太空漫游", "count": 420 },
+    { "slug": "s19", "title": "路一直都在", "count": 376 },
+    { "slug": "s20", "title": "我们万岁", "count": 372 },
+    { "slug": "s18", "title": "陪你度过漫长岁月", "count": 359 },
+    { "slug": "s02", "title": "人神斗", "count": 342 },
+    { "slug": "s04", "title": "时代巨轮", "count": 330 },
+    { "slug": "s03", "title": "当这地球没有花", "count": 286 },
+    { "slug": "s15", "title": "大人", "count": 266 },
+    { "slug": "s06", "title": "兄妹", "count": 172 },
+    { "slug": "s10", "title": "异梦", "count": 131 },
+    { "slug": "s09", "title": "红玫瑰", "count": 113 },
+    { "slug": "s07", "title": "心的距离", "count": 106 },
+    { "slug": "s08", "title": "我们", "count": 102 },
+    { "slug": "s16", "title": "七百年后", "count": 67 },
+    { "slug": "s05", "title": "黑洞", "count": 45 }
+  ]
+}

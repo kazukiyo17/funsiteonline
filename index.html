@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="funsite.online — SharonLee 的作品展示" />
+  <title>funsite.online · 作品集</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Noto+Sans+SC:wght@400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --text: #15201f;
+      --text-soft: #4a6670;
+      --accent: #0d9488;
+      --accent-soft: rgba(13, 148, 136, 0.14);
+      --shadow: 0 8px 32px rgba(49, 46, 129, 0.08), 0 2px 8px rgba(15, 23, 42, 0.04);
+      --shadow-hover: 0 22px 56px rgba(99, 102, 241, 0.18), 0 8px 24px rgba(13, 148, 136, 0.12);
+      --radius: 22px;
+      --radius-sm: 14px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --gradient-card-bar: linear-gradient(180deg, #6366f1 0%, #06b6d4 50%, #ec4899 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Noto Sans SC", "DM Sans", system-ui, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-color: #eef2ff;
+      background-image:
+        radial-gradient(ellipse 100% 90% at 85% -15%, rgba(167, 139, 250, 0.35), transparent 52%),
+        radial-gradient(ellipse 85% 75% at -5% 55%, rgba(45, 212, 191, 0.28), transparent 48%),
+        radial-gradient(ellipse 70% 55% at 40% 105%, rgba(251, 191, 36, 0.18), transparent 55%),
+        linear-gradient(168deg, #f8faff 0%, #f0fdf9 38%, #fff8f3 72%, #f5f3ff 100%);
+      background-attachment: fixed;
+    }
+
+    .bg-noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .bg-blobs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .bg-blobs span {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(72px);
+      opacity: 0.58;
+      animation: float 18s var(--ease) infinite;
+    }
+
+    .bg-blobs span:nth-child(1) {
+      width: 460px;
+      height: 460px;
+      background: radial-gradient(circle, #a7f3d0 0%, #5eead4 55%, transparent 70%);
+      top: -140px;
+      right: -100px;
+      animation-delay: 0s;
+    }
+
+    .bg-blobs span:nth-child(2) {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #c4b5fd 0%, #818cf8 50%, transparent 72%);
+      bottom: 5%;
+      left: -120px;
+      animation-delay: -6s;
+    }
+
+    .bg-blobs span:nth-child(3) {
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, #fbcfe8 0%, #f472b6 45%, transparent 70%);
+      top: 42%;
+      right: 8%;
+      animation-delay: -12s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(24px, -20px) scale(1.03); }
+      66% { transform: translate(-16px, 12px) scale(0.98); }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: clamp(2rem, 6vw, 4rem) clamp(1.25rem, 4vw, 2rem) 4rem;
+    }
+
+    header.hero {
+      text-align: center;
+      margin-bottom: clamp(2.5rem, 7vw, 4rem);
+      position: relative;
+    }
+
+    header.hero::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+      width: min(520px, 92vw);
+      height: min(280px, 42vw);
+      background: radial-gradient(ellipse at center, rgba(99, 102, 241, 0.12) 0%, transparent 68%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem 0.4rem 0.85rem;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 253, 250, 0.92) 100%);
+      border-radius: 999px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-soft);
+      border: 1px solid rgba(99, 102, 241, 0.22);
+      box-shadow: var(--shadow), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+      opacity: 0;
+      animation: rise 0.85s var(--ease) 0.05s forwards;
+    }
+
+    .hero-badge .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.22);
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.65; transform: scale(0.92); }
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-family: "Outfit", "DM Sans", system-ui, sans-serif;
+      font-size: clamp(2.15rem, 6.2vw, 3.15rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-top: 1.35rem;
+      margin-bottom: 0.45rem;
+      opacity: 0;
+      animation: rise 0.9s var(--ease) 0.15s forwards;
+      color: var(--text);
+    }
+
+    .hero-tagline {
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--text-soft);
+      margin-bottom: 1.65rem;
+      opacity: 0;
+      animation: rise 0.9s var(--ease) 0.28s forwards;
+    }
+
+    .social {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      justify-content: center;
+      opacity: 0;
+      animation: rise 0.9s var(--ease) 0.4s forwards;
+    }
+
+    .social a {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+      padding: 0.65rem 1.15rem;
+      min-width: 8.75rem;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 255, 255, 0.72) 100%);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: var(--text);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      box-shadow: var(--shadow);
+      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.3s, background 0.3s;
+    }
+
+    .social a:nth-child(1) {
+      border-color: rgba(255, 59, 92, 0.18);
+    }
+
+    .social a:nth-child(2) {
+      border-color: rgba(6, 182, 212, 0.22);
+    }
+
+    .social-platform {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .social-handle {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-soft);
+      line-height: 1.3;
+      text-align: center;
+    }
+
+    .social a:nth-child(1):hover {
+      transform: translateY(-4px);
+      border-color: rgba(255, 59, 92, 0.35);
+      box-shadow: 0 18px 44px rgba(255, 59, 92, 0.14), var(--shadow);
+      background: linear-gradient(145deg, #fff5f7 0%, rgba(255, 255, 255, 0.9) 100%);
+    }
+
+    .social a:nth-child(2):hover {
+      transform: translateY(-4px);
+      border-color: rgba(6, 182, 212, 0.45);
+      box-shadow: 0 18px 44px rgba(6, 182, 212, 0.16), var(--shadow);
+      background: linear-gradient(145deg, #ecfeff 0%, rgba(255, 255, 255, 0.9) 100%);
+    }
+
+    .social a:active {
+      transform: translateY(-1px);
+    }
+
+    .social-platform svg {
+      width: 18px;
+      height: 18px;
+      opacity: 0.85;
+      flex-shrink: 0;
+    }
+
+    section.works {
+      opacity: 0;
+      animation: rise 0.95s var(--ease) 0.52s forwards;
+    }
+
+    .card-grid {
+      display: grid;
+      gap: 1.25rem;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 560px) {
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .card {
+      position: relative;
+      display: block;
+      padding: 1.55rem 1.5rem 1.35rem 1.65rem;
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.94) 0%, rgba(248, 250, 252, 0.88) 100%);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: inherit;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(99, 102, 241, 0.12);
+      overflow: hidden;
+      transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), border-color 0.35s;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 1.1rem;
+      bottom: 1.1rem;
+      width: 5px;
+      border-radius: 0 6px 6px 0;
+      background: var(--gradient-card-bar);
+      opacity: 0.92;
+      box-shadow: 0 0 16px rgba(236, 72, 153, 0.35);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(125deg, rgba(99, 102, 241, 0.09) 0%, rgba(6, 182, 212, 0.06) 40%, rgba(236, 72, 153, 0.06) 100%);
+      opacity: 0;
+      transition: opacity 0.45s var(--ease);
+    }
+
+    .card:hover {
+      transform: translateY(-8px) scale(1.015);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(99, 102, 241, 0.28);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .card h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.45rem;
+      letter-spacing: -0.015em;
+      color: var(--text);
+    }
+
+    .card p {
+      font-size: 0.875rem;
+      color: var(--text-soft);
+      line-height: 1.55;
+    }
+
+    .card-arrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 1rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--accent);
+      transition: gap 0.35s var(--ease);
+    }
+
+    .card:hover .card-arrow {
+      gap: 0.55rem;
+    }
+
+    .card-arrow svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.35s var(--ease);
+      stroke: currentColor;
+    }
+
+    .card:hover .card-arrow svg {
+      transform: translateX(4px);
+    }
+
+    .card-grid .card:nth-child(1) { animation: card-in 0.7s var(--ease) 0.65s both; }
+    .card-grid .card:nth-child(2) { animation: card-in 0.7s var(--ease) 0.75s both; }
+    .card-grid .card:nth-child(3) { animation: card-in 0.7s var(--ease) 0.85s both; }
+    .card-grid .card:nth-child(4) { animation: card-in 0.7s var(--ease) 0.95s both; }
+
+    .news-section {
+      margin-top: clamp(2.25rem, 6vw, 3.25rem);
+      opacity: 0;
+      animation: rise 0.95s var(--ease) 0.58s forwards;
+    }
+
+    .news-section h2 {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      color: var(--text-soft);
+      margin-bottom: 1.1rem;
+      padding-left: 0.15rem;
+    }
+
+    .news-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 1.15rem;
+    }
+
+    .news-card {
+      position: relative;
+      padding: 1.35rem 1.35rem 1.25rem 1.45rem;
+      background: linear-gradient(155deg, rgba(255, 255, 255, 0.92) 0%, rgba(248, 250, 252, 0.85) 100%);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: var(--radius);
+      border: 1px solid rgba(13, 148, 136, 0.14);
+      box-shadow: var(--shadow);
+      transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.3s;
+    }
+
+    .news-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 1rem;
+      bottom: 1rem;
+      width: 4px;
+      border-radius: 0 5px 5px 0;
+      background: var(--accent);
+      opacity: 0.85;
+    }
+
+    .news-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(13, 148, 136, 0.28);
+    }
+
+    .news-card__head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem 0.85rem;
+      margin-bottom: 0.65rem;
+      padding-left: 0.15rem;
+    }
+
+    .news-card time {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-soft);
+      letter-spacing: 0.04em;
+    }
+
+    .news-card__tag {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+    }
+
+    .news-card__note {
+      font-size: 0.9375rem;
+      color: var(--text);
+      line-height: 1.65;
+      padding-left: 0.15rem;
+    }
+
+    .news-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+      gap: 0.65rem 1rem;
+      margin-top: 1rem;
+      padding: 0.85rem 0.95rem;
+      background: rgba(13, 148, 136, 0.06);
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(13, 148, 136, 0.1);
+    }
+
+    .news-stats > div {
+      min-width: 0;
+    }
+
+    .news-stats dt {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      margin-bottom: 0.15rem;
+    }
+
+    .news-stats dd {
+      font-family: "Outfit", "DM Sans", system-ui, sans-serif;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .news-card__foot {
+      margin-top: 1rem;
+      padding-left: 0.15rem;
+    }
+
+    .news-card__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: gap 0.3s var(--ease);
+    }
+
+    .news-card__link:hover {
+      gap: 0.5rem;
+    }
+
+    .news-card__link svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+    }
+
+    .news-feed .news-card {
+      animation: card-in 0.65s var(--ease) both;
+      animation-delay: calc(0.68s + var(--news-i, 0) * 0.08s);
+    }
+
+    .news-feed__empty,
+    .news-feed__error {
+      font-size: 0.875rem;
+      line-height: 1.55;
+      padding: 0.35rem 0.15rem 0.5rem;
+    }
+
+    .news-feed__empty {
+      color: var(--text-soft);
+    }
+
+    .news-feed__error {
+      color: #9a3412;
+    }
+
+    @keyframes card-in {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.8125rem;
+      color: var(--text-soft);
+      opacity: 0;
+      animation: rise 0.85s var(--ease) 1s forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-noise" aria-hidden="true"></div>
+  <div class="bg-blobs" aria-hidden="true">
+    <span></span><span></span><span></span>
+  </div>
+
+  <div class="wrap">
+    <header class="hero">
+      <p class="hero-badge"><span class="dot" aria-hidden="true"></span> 欢迎来访</p>
+      <h1>funsite.online</h1>
+      <p class="hero-tagline">SharonLee · 热爱创造热爱</p>
+      <nav class="social" aria-label="社交媒体">
+        <!-- 将 # 替换为个人主页链接 -->
+        <a href="#" target="_blank" rel="noopener noreferrer" aria-label="小红书 No, but?">
+          <span class="social-platform">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M12 3v18M6 8h12M8 16h8" stroke-linecap="round" />
+            </svg>
+            小红书
+          </span>
+          <span class="social-handle">No, but?</span>
+        </a>
+        <a href="#" target="_blank" rel="noopener noreferrer" aria-label="抖音 泥莫斯叭">
+          <span class="social-platform">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M16.6 5.82s.51.5 0 1.64c-.51 1.14-.86 1.66-1.86 2.23v5.45a5.15 5.15 0 1 1-5.15-5.15c.17 0 .33.02.5.04v2.32a2.85 2.85 0 1 0 2.13 2.76V4h2.38z" />
+            </svg>
+            抖音
+          </span>
+          <span class="social-handle">泥莫斯叭</span>
+        </a>
+      </nav>
+    </header>
+
+    <section class="works" aria-label="作品">
+      <div class="card-grid">
+        <a class="card" href="fndsquiz/index.html">
+          <div class="card-inner">
+            <h3>共鸣测试 · Fear and Dreams</h3>
+            <p>以 Fear and Dreams 为序，解锁你的人格底色，看见怯懦与浪漫、挣扎与理想。</p>
+            <span class="card-arrow">
+              进入
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="news-section" aria-labelledby="news-heading">
+      <h2 id="news-heading">资讯</h2>
+      <div class="news-feed" id="news-feed"></div>
+    </section>
+
+    <footer>
+      <p>© funsite.online</p>
+    </footer>
+  </div>
+  <script>
+    (function () {
+      var feed = document.getElementById("news-feed");
+      var headingEl = document.getElementById("news-heading");
+      if (!feed) return;
+
+      fetch("news.json", { credentials: "same-origin" })
+        .then(function (r) {
+          if (!r.ok) throw new Error("bad status");
+          return r.json();
+        })
+        .then(function (data) {
+          if (headingEl && data.heading) headingEl.textContent = data.heading;
+          var items = Array.isArray(data.items) ? data.items : [];
+          if (!items.length) {
+            feed.innerHTML = '<p class="news-feed__empty">暂无资讯</p>';
+            return;
+          }
+          feed.textContent = "";
+          items.forEach(function (item, i) {
+            feed.appendChild(renderNewsCard(item, i));
+          });
+        })
+        .catch(function () {
+          feed.innerHTML =
+            '<p class="news-feed__error" role="alert">资讯加载失败。请用本地服务器打开站点（例如 <code>npx serve</code>），以便读取 news.json；不要直接用 file:// 打开。</p>';
+        });
+
+      function renderNewsCard(item, index) {
+        var article = document.createElement("article");
+        article.className = "news-card";
+        article.style.setProperty("--news-i", String(index));
+
+        var head = document.createElement("header");
+        head.className = "news-card__head";
+        var timeEl = document.createElement("time");
+        timeEl.dateTime = item.date || "";
+        timeEl.textContent = item.dateDisplay != null ? item.dateDisplay : item.date || "";
+        head.appendChild(timeEl);
+        if (item.tag) {
+          var tag = document.createElement("span");
+          tag.className = "news-card__tag";
+          tag.textContent = item.tag;
+          head.appendChild(tag);
+        }
+        article.appendChild(head);
+
+        var note = document.createElement("p");
+        note.className = "news-card__note";
+        note.style.whiteSpace = "pre-wrap";
+        note.textContent = item.note || "";
+        article.appendChild(note);
+
+        if (item.stats && item.stats.length) {
+          var dl = document.createElement("dl");
+          dl.className = "news-stats";
+          if (item.statsAriaLabel) dl.setAttribute("aria-label", item.statsAriaLabel);
+          item.stats.forEach(function (row) {
+            var wrap = document.createElement("div");
+            var dt = document.createElement("dt");
+            dt.textContent = row.label || "";
+            var dd = document.createElement("dd");
+            dd.textContent = row.value != null ? String(row.value) : "";
+            wrap.appendChild(dt);
+            wrap.appendChild(dd);
+            dl.appendChild(wrap);
+          });
+          article.appendChild(dl);
+        }
+
+        if (item.link && item.link.href) {
+          var foot = document.createElement("footer");
+          foot.className = "news-card__foot";
+          var a = document.createElement("a");
+          a.className = "news-card__link";
+          a.href = item.link.href;
+          if (item.link.newTab) {
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+          }
+          a.appendChild(document.createTextNode(item.link.text || "了解更多"));
+          var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          svg.setAttribute("viewBox", "0 0 24 24");
+          svg.setAttribute("fill", "none");
+          svg.setAttribute("stroke", "currentColor");
+          svg.setAttribute("stroke-width", "2");
+          svg.setAttribute("aria-hidden", "true");
+          var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          path.setAttribute("d", "M5 12h14M13 6l6 6-6 6");
+          path.setAttribute("stroke-linecap", "round");
+          path.setAttribute("stroke-linejoin", "round");
+          svg.appendChild(path);
+          a.appendChild(svg);
+          foot.appendChild(a);
+          article.appendChild(foot);
+        }
+
+        return article;
+      }
+    })();
+  </script>
+</body>
+</html>

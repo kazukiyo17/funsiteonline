@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>数据统计 · Fear and Dreams</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <meta name="theme-color" content="#0a0812" />
+  <script defer src="/_vercel/insights/script.js"></script>
+  <style>
+    :root {
+      --bg: #050508;
+      --text: rgba(255, 255, 255, 0.94);
+      --muted: rgba(255, 255, 255, 0.58);
+      --line: rgba(255, 255, 255, 0.12);
+      --accent: #c084fc;
+      --card: rgba(20, 16, 28, 0.72);
+      --chart-grid: rgba(255, 255, 255, 0.06);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100dvh;
+      background: var(--bg);
+      background-image: radial-gradient(ellipse 90% 70% at 50% 0%, #1a1025 0%, var(--bg) 55%);
+      color: var(--text);
+      font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .shell {
+      max-width: min(72rem, 100%);
+      margin: 0 auto;
+      padding: 1rem 1.15rem 2.5rem;
+    }
+
+    .top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem 1rem;
+      margin-bottom: 1.35rem;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .brand__eyebrow {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      color: rgba(255, 255, 255, 0.42);
+      text-transform: uppercase;
+    }
+
+    .brand__title {
+      font-size: clamp(1.15rem, 3.5vw, 1.45rem);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .back,
+    .btn-ghost {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      background: none;
+      border: none;
+      font-family: inherit;
+      cursor: pointer;
+      padding: 0.35rem 0;
+    }
+
+    .back:hover,
+    .btn-ghost:hover:not(:disabled) {
+      color: #fff;
+    }
+
+    .btn-ghost:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .kpi {
+      padding: 1rem 1.1rem;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow: 0 0 0 1px rgba(200, 170, 255, 0.04) inset;
+    }
+
+    .kpi__label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+
+    .kpi__value {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      background: linear-gradient(135deg, #e9d5ff, #c084fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .kpi__sub {
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.38);
+      margin-top: 0.35rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    @media (min-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+      }
+
+      .layout__wide {
+        grid-column: 1 / -1;
+      }
+    }
+
+    .card {
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      padding: 1rem 1rem 0.85rem;
+      box-shadow: 0 16px 40px -20px rgba(0, 0, 0, 0.55);
+    }
+
+    .card__head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.35rem 0.75rem;
+      margin-bottom: 0.85rem;
+      padding: 0 0.15rem;
+    }
+
+    .card__title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .card__note {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .chart-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 -0.25rem;
+      padding: 0 0.25rem 0.25rem;
+    }
+
+    .chart-svg {
+      display: block;
+      width: 100%;
+      min-width: 280px;
+      height: auto;
+      min-height: 200px;
+    }
+
+    .chart-svg text {
+      font-family: "Noto Sans SC", sans-serif;
+      font-size: 10px;
+      fill: rgba(255, 255, 255, 0.45);
+    }
+
+    .pie-wrap {
+      display: grid;
+      grid-template-columns: minmax(200px, 280px) minmax(0, 1fr);
+      gap: 1rem 1.25rem;
+      align-items: start;
+      padding-bottom: 0.35rem;
+    }
+
+    @media (max-width: 700px) {
+      .pie-wrap {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+    }
+
+    .pie-svg {
+      display: block;
+      width: 100%;
+      max-width: 280px;
+      height: auto;
+      aspect-ratio: 1;
+    }
+
+    .pie-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 0.38rem;
+      width: 100%;
+      max-height: min(70vh, 52rem);
+      overflow-y: auto;
+      padding-right: 0.25rem;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(192, 132, 252, 0.35) transparent;
+    }
+
+    .pie-legend::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .pie-legend::-webkit-scrollbar-thumb {
+      background: rgba(192, 132, 252, 0.35);
+      border-radius: 3px;
+    }
+
+    .legend-row {
+      display: grid;
+      grid-template-columns: 11px minmax(0, 1fr) 2.75rem 2.75rem;
+      gap: 0.35rem 0.45rem;
+      align-items: center;
+      font-size: 0.78rem;
+    }
+
+    @media (min-width: 480px) {
+      .legend-row {
+        grid-template-columns: 11px minmax(0, 1fr) 3rem 3rem;
+        font-size: 0.82rem;
+      }
+    }
+
+    .legend-row__dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-row__name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .legend-row__pct,
+    .legend-row__n {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      color: var(--muted);
+    }
+
+    .state {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .state--err {
+      color: #fda4af;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .updated {
+      font-size: 0.72rem;
+      color: rgba(255, 255, 255, 0.35);
+      margin-top: 1.5rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <div class="brand">
+        <span class="brand__eyebrow">Fear &amp; Dreams</span>
+        <h1 class="brand__title">共鸣测试 · 数据统计</h1>
+      </div>
+      <div class="top-actions">
+        <button type="button" class="btn-ghost" id="btn-refresh" disabled>刷新</button>
+        <a class="back" href="index.html">← 返回首页</a>
+      </div>
+    </header>
+
+    <div id="state-loading" class="state">加载中…</div>
+    <div id="state-error" class="state state--err" hidden></div>
+
+    <div id="main" hidden>
+      <section class="kpis" aria-label="汇总">
+        <div class="kpi">
+          <p class="kpi__label">总计</p>
+          <p class="kpi__value" id="kpi-total">0</p>
+          <p class="kpi__sub" id="kpi-sub">各曲目完成次数之和</p>
+        </div>
+      </section>
+
+      <div class="layout">
+        <section class="card layout__wide" aria-labelledby="h-day">
+          <div class="card__head">
+            <h2 class="card__title" id="h-day">每日完成趋势</h2>
+            <span class="card__note" id="day-note">最近若干天</span>
+          </div>
+          <div class="chart-wrap">
+            <svg class="chart-svg" id="chart-day" viewBox="0 0 640 220" role="img" aria-label="每日完成次数折线图"></svg>
+          </div>
+        </section>
+
+        <section class="card layout__wide" aria-labelledby="h-res">
+          <div class="card__head">
+            <h2 class="card__title" id="h-res">各单曲占比</h2>
+            <span class="card__note">环形图相对总计（曲目计数之和）</span>
+          </div>
+          <div class="pie-wrap">
+            <svg class="chart-svg pie-svg" id="chart-pie" viewBox="0 0 280 280" role="img" aria-label="各单曲占比饼图"></svg>
+            <div class="pie-legend" id="pie-legend"></div>
+          </div>
+        </section>
+      </div>
+
+      <p class="updated" id="updated-at"></p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var API = "/api/quiz/stats";
+
+      var elLoading = document.getElementById("state-loading");
+      var elError = document.getElementById("state-error");
+      var elMain = document.getElementById("main");
+      var elRefresh = document.getElementById("btn-refresh");
+      var elKpiTotal = document.getElementById("kpi-total");
+      var elKpiSub = document.getElementById("kpi-sub");
+      var elDayNote = document.getElementById("day-note");
+      var elChartDay = document.getElementById("chart-day");
+      var elChartPie = document.getElementById("chart-pie");
+      var elPieLegend = document.getElementById("pie-legend");
+      var elUpdated = document.getElementById("updated-at");
+
+      function showLoading(on) {
+        elLoading.hidden = !on;
+      }
+
+      function showError(msg) {
+        elError.textContent = msg || "加载失败";
+        elError.hidden = false;
+        elMain.hidden = true;
+      }
+
+      function hideError() {
+        elError.hidden = true;
+      }
+
+      function formatNow() {
+        var d = new Date();
+        var pad = function (n) { return n < 10 ? "0" + n : String(n); };
+        return (
+          d.getFullYear() +
+          "-" +
+          pad(d.getMonth() + 1) +
+          "-" +
+          pad(d.getDate()) +
+          " " +
+          pad(d.getHours()) +
+          ":" +
+          pad(d.getMinutes())
+        );
+      }
+
+      function sortDaysAsc(arr) {
+        var copy = arr.slice();
+        copy.sort(function (a, b) {
+          return a.date < b.date ? -1 : a.date > b.date ? 1 : 0;
+        });
+        return copy;
+      }
+
+      function drawDayChart(svg, days) {
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+        var W = 640;
+        var H = 220;
+        var padL = 36;
+        var padR = 12;
+        var padT = 14;
+        var padB = 44;
+
+        var innerW = W - padL - padR;
+        var innerH = H - padT - padB;
+
+        if (!days.length) {
+          var empty = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          empty.setAttribute("x", String(W / 2));
+          empty.setAttribute("y", String(H / 2));
+          empty.setAttribute("text-anchor", "middle");
+          empty.textContent = "暂无每日数据";
+          svg.appendChild(empty);
+          return;
+        }
+
+        var slice = days.length > 45 ? days.slice(-45) : days;
+        elDayNote.textContent = "共 " + slice.length + " 天 · 横轴由旧到新";
+
+        var maxY = 0;
+        for (var i = 0; i < slice.length; i++) {
+          if (slice[i].count > maxY) maxY = slice[i].count;
+        }
+        if (maxY < 1) maxY = 1;
+
+        var n = slice.length;
+        var dx = n > 1 ? innerW / (n - 1) : 0;
+
+        function xAt(idx) {
+          return padL + idx * dx;
+        }
+
+        function yAt(v) {
+          return padT + innerH * (1 - v / maxY);
+        }
+
+        var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+        var grad = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+        grad.setAttribute("id", "areaGrad");
+        grad.setAttribute("x1", "0");
+        grad.setAttribute("y1", "0");
+        grad.setAttribute("x2", "0");
+        grad.setAttribute("y2", "1");
+        var s1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+        s1.setAttribute("offset", "0%");
+        s1.setAttribute("stop-color", "#a855f7");
+        s1.setAttribute("stop-opacity", "0.35");
+        var s2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+        s2.setAttribute("offset", "100%");
+        s2.setAttribute("stop-color", "#050508");
+        s2.setAttribute("stop-opacity", "0");
+        grad.appendChild(s1);
+        grad.appendChild(s2);
+        defs.appendChild(grad);
+        svg.appendChild(defs);
+
+        var gridSteps = 4;
+        for (var g = 0; g <= gridSteps; g++) {
+          var gv = (maxY * g) / gridSteps;
+          var gy = yAt(gv);
+          var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          line.setAttribute("x1", String(padL));
+          line.setAttribute("y1", String(gy));
+          line.setAttribute("x2", String(W - padR));
+          line.setAttribute("y2", String(gy));
+          line.setAttribute("stroke", "rgba(255,255,255,0.06)");
+          line.setAttribute("stroke-width", "1");
+          svg.appendChild(line);
+          var t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          t.setAttribute("x", String(padL - 6));
+          t.setAttribute("y", String(gy + 4));
+          t.setAttribute("text-anchor", "end");
+          t.textContent = String(Math.round(gv));
+          svg.appendChild(t);
+        }
+
+        var pts = [];
+        var pathD = "";
+        var areaD = "";
+        for (var p = 0; p < n; p++) {
+          var cx = xAt(p);
+          var cy = yAt(slice[p].count);
+          pts.push({ x: cx, y: cy, d: slice[p].date, c: slice[p].count });
+          pathD += (p === 0 ? "M " : " L ") + cx.toFixed(2) + " " + cy.toFixed(2);
+        }
+        if (n > 0) {
+          areaD =
+            pathD +
+            " L " +
+            xAt(n - 1).toFixed(2) +
+            " " +
+            (padT + innerH).toFixed(2) +
+            " L " +
+            padL.toFixed(2) +
+            " " +
+            (padT + innerH).toFixed(2) +
+            " Z";
+        }
+
+        var area = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        area.setAttribute("d", areaD);
+        area.setAttribute("fill", "url(#areaGrad)");
+        svg.appendChild(area);
+
+        var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", pathD);
+        path.setAttribute("fill", "none");
+        path.setAttribute("stroke", "#c084fc");
+        path.setAttribute("stroke-width", "2");
+        path.setAttribute("stroke-linecap", "round");
+        path.setAttribute("stroke-linejoin", "round");
+        svg.appendChild(path);
+
+        for (var q = 0; q < pts.length; q++) {
+          var dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          dot.setAttribute("cx", String(pts[q].x));
+          dot.setAttribute("cy", String(pts[q].y));
+          dot.setAttribute("r", "3.5");
+          dot.setAttribute("fill", "#f0abfc");
+          dot.setAttribute("stroke", "#4c1d95");
+          dot.setAttribute("stroke-width", "1");
+          var title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+          title.textContent = pts[q].d + " · " + pts[q].c + " 次";
+          dot.appendChild(title);
+          svg.appendChild(dot);
+        }
+
+        var tickEvery = n <= 10 ? 1 : n <= 20 ? 2 : n <= 35 ? 3 : Math.ceil(n / 12);
+        for (var ti = 0; ti < n; ti += tickEvery) {
+          var lab = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          lab.setAttribute("x", String(xAt(ti)));
+          lab.setAttribute("y", String(H - 18));
+          lab.setAttribute("text-anchor", "middle");
+          var ds = slice[ti].date;
+          if (ds.length >= 10) ds = ds.slice(5);
+          lab.textContent = ds;
+          svg.appendChild(lab);
+        }
+      }
+
+      function colorForSlug(slug) {
+        var n = parseInt(String(slug).replace(/^s/, ""), 10);
+        if (!isFinite(n) || n < 1) n = 1;
+        var h = ((n - 1) * 47 + 278) % 360;
+        var l = 52 + ((n - 1) % 4) * 4;
+        return "hsl(" + h + ", 58%, " + l + "%)";
+      }
+
+      function donutSlicePath(cx, cy, r0, r1, a0, a1) {
+        var x0o = cx + r0 * Math.cos(a0);
+        var y0o = cy + r0 * Math.sin(a0);
+        var x1o = cx + r0 * Math.cos(a1);
+        var y1o = cy + r0 * Math.sin(a1);
+        var x0i = cx + r1 * Math.cos(a1);
+        var y0i = cy + r1 * Math.sin(a1);
+        var x1i = cx + r1 * Math.cos(a0);
+        var y1i = cy + r1 * Math.sin(a0);
+        var large = a1 - a0 > Math.PI ? 1 : 0;
+        return (
+          "M " +
+          x0o +
+          " " +
+          y0o +
+          " A " +
+          r0 +
+          " " +
+          r0 +
+          " 0 " +
+          large +
+          " 1 " +
+          x1o +
+          " " +
+          y1o +
+          " L " +
+          x0i +
+          " " +
+          y0i +
+          " A " +
+          r1 +
+          " " +
+          r1 +
+          " 0 " +
+          large +
+          " 0 " +
+          x1i +
+          " " +
+          y1i +
+          " Z"
+        );
+      }
+
+      function drawPieChart(svg, rows, sum) {
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+        var ns = "http://www.w3.org/2000/svg";
+        var cx = 140;
+        var cy = 140;
+        var rOut = 118;
+        var rIn = 64;
+
+        if (!sum || sum < 1) {
+          var empty = document.createElementNS(ns, "text");
+          empty.setAttribute("x", "140");
+          empty.setAttribute("y", "142");
+          empty.setAttribute("text-anchor", "middle");
+          empty.setAttribute("fill", "rgba(255,255,255,0.35)");
+          empty.setAttribute("font-size", "13");
+          empty.textContent = "暂无数据";
+          svg.appendChild(empty);
+          return;
+        }
+
+        var angle = -Math.PI / 2;
+        for (var i = 0; i < rows.length; i++) {
+          var row = rows[i];
+          var c = row.count;
+          if (!c) continue;
+          var da = (c / sum) * 2 * Math.PI;
+          var a0 = angle;
+          var a1 = angle + da;
+          angle = a1;
+
+          var path = document.createElementNS(ns, "path");
+          path.setAttribute("d", donutSlicePath(cx, cy, rOut, rIn, a0, a1));
+          path.setAttribute("fill", colorForSlug(row.slug));
+          path.setAttribute("stroke", "rgba(5,5,8,0.85)");
+          path.setAttribute("stroke-width", "1.25");
+          path.setAttribute("stroke-linejoin", "round");
+          var hint = document.createElementNS(ns, "title");
+          hint.textContent = row.title + " · " + c + " · " + row.percent + "%";
+          path.appendChild(hint);
+          svg.appendChild(path);
+        }
+
+        var holeNum = document.createElementNS(ns, "text");
+        holeNum.setAttribute("x", "140");
+        holeNum.setAttribute("y", "134");
+        holeNum.setAttribute("text-anchor", "middle");
+        holeNum.setAttribute("fill", "rgba(255,255,255,0.88)");
+        holeNum.setAttribute("font-size", "17");
+        holeNum.setAttribute("font-weight", "600");
+        holeNum.textContent = String(sum);
+        svg.appendChild(holeNum);
+
+        var holeLab = document.createElementNS(ns, "text");
+        holeLab.setAttribute("x", "140");
+        holeLab.setAttribute("y", "154");
+        holeLab.setAttribute("text-anchor", "middle");
+        holeLab.setAttribute("fill", "rgba(255,255,255,0.38)");
+        holeLab.setAttribute("font-size", "10");
+        holeLab.textContent = "总计";
+        svg.appendChild(holeLab);
+      }
+
+      function renderPieLegend(container, rows, sum) {
+        container.innerHTML = "";
+        for (var r = 0; r < rows.length; r++) {
+          var row = rows[r];
+          var pct = sum > 0 ? row.percent : 0;
+          var wrap = document.createElement("div");
+          wrap.className = "legend-row";
+          var dot = document.createElement("div");
+          dot.className = "legend-row__dot";
+          dot.style.background =
+            row.count > 0 ? colorForSlug(row.slug) : "rgba(255,255,255,0.12)";
+          var name = document.createElement("div");
+          name.className = "legend-row__name";
+          name.textContent = row.title;
+          name.title = row.title;
+          var pEl = document.createElement("div");
+          pEl.className = "legend-row__pct";
+          pEl.textContent = pct.toFixed(pct < 10 && pct > 0 ? 1 : 0) + "%";
+          var nEl = document.createElement("div");
+          nEl.className = "legend-row__n";
+          nEl.textContent = String(row.count);
+          wrap.appendChild(dot);
+          wrap.appendChild(name);
+          wrap.appendChild(pEl);
+          wrap.appendChild(nEl);
+          container.appendChild(wrap);
+        }
+      }
+
+      function render(data) {
+        var kvTotal = Number(data.total) || 0;
+        var sumResult = Number(data.sumResult) || 0;
+
+        elKpiTotal.textContent = String(sumResult);
+        if (kvTotal !== sumResult && kvTotal > 0) {
+          elKpiSub.textContent =
+            "各曲目完成次数之和 · KV 累计键 " + kvTotal + "（仅供参考）";
+        } else {
+          elKpiSub.textContent = "各曲目完成次数之和";
+        }
+
+        var days = sortDaysAsc(data.byDay || []);
+        if (data.byDayUnavailable) {
+          elDayNote.textContent =
+            data.byDayUnavailableDetail === "kv.list_not_supported"
+              ? "当前环境不支持列举按日键"
+              : "按日数据暂不可用";
+        } else if (!days.length && sumResult > 0) {
+          elDayNote.textContent = "暂无按日记录（完成一次测验后会写入当日）";
+        } else {
+          elDayNote.textContent = "最近若干天";
+        }
+        drawDayChart(elChartDay, days);
+        drawPieChart(elChartPie, data.byResult || [], sumResult);
+        renderPieLegend(elPieLegend, data.byResult || [], sumResult);
+        elUpdated.textContent = "更新时间 · " + formatNow();
+      }
+
+      function load() {
+        showLoading(true);
+        hideError();
+        elMain.hidden = true;
+        if (elRefresh) elRefresh.disabled = true;
+
+        fetch(API, { credentials: "same-origin" })
+          .then(function (res) {
+            return res.json().then(function (body) {
+              return { ok: res.ok, body: body };
+            });
+          })
+          .then(function (out) {
+            showLoading(false);
+            if (elRefresh) elRefresh.disabled = false;
+
+            if (!out.body || !out.body.ok) {
+              var err =
+                out.body && out.body.error === "KV_not_bound_set_fnds_quiz_kv"
+                  ? "服务端未绑定 KV，暂无法读取统计。"
+                  : "无法加载统计数据。";
+              showError(err);
+              return;
+            }
+
+            elMain.hidden = false;
+            render(out.body);
+          })
+          .catch(function () {
+            showLoading(false);
+            if (elRefresh) elRefresh.disabled = false;
+            showError("网络异常，请稍后重试。");
+          });
+      }
+
+      if (elRefresh) {
+        elRefresh.addEventListener("click", function () {
+          load();
+        });
+      }
+
+      load();
+    })();
+  </script>
+</body>
+</html>

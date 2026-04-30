@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>共鸣测试 · Fear and Dreams</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <meta name="theme-color" content="#0a0812" />
+  <script defer src="/_vercel/insights/script.js"></script>
+  <style>
+    :root {
+      --bg: #050508;
+      --text: rgba(255, 255, 255, 0.94);
+      --muted: rgba(255, 255, 255, 0.6);
+      --line: rgba(255, 255, 255, 0.12);
+      --accent: #c084fc;
+      --danger: #f43f5e;
+      --card: rgba(20, 16, 28, 0.6);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100dvh;
+      background: var(--bg);
+      background-image: radial-gradient(ellipse 90% 70% at 50% 0%, #1a1025 0%, var(--bg) 55%);
+      color: var(--text);
+      font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .shell {
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      max-width: 32rem;
+      margin: 0 auto;
+      padding: 1rem 1.15rem 2rem;
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .back {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+
+    .back:hover { color: #fff; }
+
+    .count {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .count strong {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .bar-wrap {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+      margin-bottom: 1.75rem;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #7c3aed, #c084fc, #f0abfc);
+      transition: width 0.35s ease;
+    }
+
+    .q-head {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .q-stem {
+      font-size: 1.1rem;
+      font-weight: 500;
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+    }
+
+    .opts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .opt {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.9rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    }
+
+    .opt:hover {
+      border-color: rgba(192, 132, 252, 0.45);
+      background: rgba(32, 26, 45, 0.85);
+    }
+
+    .opt:active { transform: scale(0.99); }
+
+    .opt .k {
+      display: inline-block;
+      width: 1.4rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-right: 0.25rem;
+    }
+
+    .opt .dim {
+      display: block;
+      margin-top: 0.35rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .nav-row {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-ghost {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 0.875rem;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 0.5rem 0.25rem;
+    }
+
+    .btn-ghost:hover { color: #fff; }
+    .btn-ghost:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .panel { flex: 1; display: flex; flex-direction: column; }
+    [hidden] { display: none !important; }
+
+    .panel.done {
+      text-align: center;
+      align-items: stretch;
+      max-width: 100%;
+    }
+
+    .share-wrap {
+      width: 100%;
+      max-width: 24rem;
+      margin: 0.25rem auto 0;
+    }
+
+    .share-card {
+      position: relative;
+      text-align: center;
+      padding: 1.6rem 1.35rem 1.4rem;
+      border-radius: 1.15rem;
+      background:
+        linear-gradient(165deg, rgba(60, 42, 88, 0.32) 0%, rgba(18, 14, 28, 0.7) 55%, rgba(8, 7, 14, 0.9) 100%),
+        radial-gradient(100% 80% at 50% -20%, rgba(120, 80, 200, 0.18) 0%, transparent 50%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow:
+        0 0 0 1px rgba(200, 170, 255, 0.06) inset,
+        0 24px 48px -12px rgba(0, 0, 0, 0.55),
+        0 0 64px -20px rgba(124, 58, 237, 0.2);
+    }
+
+    .share-card::before {
+      content: "";
+      position: absolute;
+      left: 1.5rem;
+      right: 1.5rem;
+      top: 0.5rem;
+      height: 2px;
+      border-radius: 1px;
+      background: linear-gradient(90deg, transparent, rgba(200, 170, 255, 0.4), rgba(196, 132, 252, 0.2), transparent);
+      opacity: 0.7;
+    }
+
+    .share-card__brand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .share-card__eyebrow {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.28em;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .share-card__sub {
+      font-size: 0.78rem;
+      color: rgba(200, 180, 255, 0.55);
+      letter-spacing: 0.35em;
+    }
+
+    .result-lead {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.5);
+      letter-spacing: 0.18em;
+      margin: 0 0 0.9rem;
+    }
+
+    .result-song {
+      font-size: clamp(1.55rem, 5.2vw, 2.05rem);
+      font-weight: 700;
+      line-height: 1.35;
+      color: #fff;
+      letter-spacing: 0.1em;
+      margin: 0 0 1.35rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      text-shadow:
+        0 0 40px rgba(200, 160, 255, 0.45),
+        0 2px 12px rgba(0, 0, 0, 0.45);
+    }
+
+    .result-rail {
+      text-align: left;
+      max-width: 20rem;
+      margin: 0 auto;
+      padding: 0 0 0 0.9rem;
+      border-left: 2px solid rgba(167, 139, 250, 0.45);
+    }
+
+    .result-personality {
+      font-size: 1.12rem;
+      font-weight: 600;
+      line-height: 1.5;
+      color: #f3e8ff;
+      margin: 0 0 0.85rem;
+    }
+
+    .result-copy {
+      font-size: 0.9rem;
+      font-weight: 400;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.58);
+      margin: 0;
+      white-space: pre-line;
+    }
+
+    .share-hint {
+      font-size: 0.78rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.4);
+      margin: 1.4rem 0 0.15rem;
+      padding-top: 1.1rem;
+      border-top: 1px dashed rgba(255, 255, 255, 0.1);
+      letter-spacing: 0.04em;
+    }
+
+    .done-footer {
+      margin-top: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      width: 100%;
+    }
+
+    .done-footer .opt {
+      max-width: 220px;
+    }
+
+    @keyframes shareCardIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .panel.done[hidden] .share-card { animation: none; }
+      .panel.done:not([hidden]) .share-card { animation: shareCardIn 0.55s ease both; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bar-fill { transition: none; }
+    }
+
+    .quiz-social {
+      margin-top: 2rem;
+      padding-top: 0.5rem;
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      line-height: 1.65;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.35rem 0.55rem;
+    }
+
+    .quiz-social__line {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      margin: 0;
+    }
+
+    .quiz-social__icon {
+      width: 1.05em;
+      height: 1.05em;
+      flex-shrink: 0;
+      opacity: 0.92;
+    }
+
+    .quiz-social__line--xhs .quiz-social__icon {
+      color: #fda4af;
+    }
+
+    .quiz-social__line--douyin .quiz-social__icon {
+      color: #7dd3fc;
+    }
+
+    .quiz-social__sep {
+      color: rgba(255, 255, 255, 0.28);
+      user-select: none;
+      padding: 0 0.05rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <a class="back" href="index.html">← 返回</a>
+
+    <div id="quiz-panel" class="panel">
+      <div class="top">
+        <span class="count" id="q-count" aria-live="polite"
+          >第 <strong id="q-num">1</strong> 题 <span class="of">·</span> 共 <strong>16</strong> 题</span>
+      </div>
+      <div class="bar-wrap" role="progressbar" aria-valuemin="1" aria-valuemax="16" aria-valuenow="1" id="q-progress-wrap">
+        <div class="bar-fill" id="q-bar" aria-hidden="true"></div>
+      </div>
+
+      <p class="q-head">Fear & Dreams · 灵魂测试</p>
+      <h1 class="q-stem" id="q-stem">加载中…</h1>
+      <div class="opts" id="q-opts" role="listbox" aria-label="请选择一个答案"></div>
+      <div class="nav-row">
+        <button type="button" class="btn-ghost" id="btn-prev" disabled>上一题</button>
+        <span class="count" id="q-hint" style="font-size:0.75rem;">点选一项进入下一题</span>
+        <span style="width:4rem"></span>
+      </div>
+    </div>
+
+    <div id="done-panel" class="panel done" hidden>
+      <div class="share-wrap">
+        <article class="share-card" aria-label="你的测试结果">
+          <header class="share-card__brand">
+            <span class="share-card__eyebrow">Fear &amp; Dreams</span>
+            <span class="share-card__sub">灵魂共鸣</span>
+          </header>
+          <p class="result-lead">与你灵魂共鸣的是</p>
+          <p class="result-song" id="result-song" role="status" aria-live="polite">【 】</p>
+          <div class="result-rail">
+            <p class="result-personality" id="result-personality" aria-live="polite">——</p>
+            <p class="result-copy" id="result-copy" aria-live="polite"></p>
+          </div>
+          <p class="share-hint">快来分享给更多 EF，和同频家人一起测一测✨</p>
+        </article>
+      </div>
+      <div class="done-footer">
+        <button type="button" class="opt" id="btn-restart" style="text-align: center; cursor: pointer;">重新测试</button>
+        <a class="back" href="index.html" style="text-align: center;">返回首页</a>
+      </div>
+    </div>
+
+    <footer class="quiz-social" aria-label="作者社交账号">
+      <p class="quiz-social__line quiz-social__line--xhs">
+        <svg class="quiz-social__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H6V4h5v7l2.5-1.5L16 11V4h2v16z"/>
+        </svg>
+        <span>No, But?</span>
+      </p>
+      <span class="quiz-social__sep" aria-hidden="true">·</span>
+      <p class="quiz-social__line quiz-social__line--douyin">
+        <svg class="quiz-social__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+        <span>泥莫斯叭</span>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var KEY = "fnd_quiz_answers_v2";
+      var TOTAL = 16;
+
+      var QUIZ = [
+        { text: "热闹聚会里，你一般是？", options: [
+          { key: "A", label: "格格不入，只想早点溜回家独处", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "容易走神，偷偷想起感情里的旧碎片", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "时而社牛时而社恐，状态反复横跳", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "沉浸式凑热闹，主打一个开心就好", dim: "Db", tag: "Doubtless" }
+        ]},
+        { text: "面对乱糟糟的生活节奏，你的状态？", options: [
+          { key: "A", label: "被推着走，很多事都懒得反抗", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "感情里总差点运气，慢慢看淡随缘", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "间歇性摆烂，间歇性努力，反复拉扯", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "自有节奏，不慌不忙，松弛过日子", dim: "Db", tag: "Doubtless" }
+        ]},
+        { text: "碰到虚伪、敷衍的人和事，你会？", options: [
+          { key: "A", label: "佛系无视，懒得掰扯，默默远离", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "很难再全心投入，防备心悄悄变重", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "嘴上无所谓，心里还是会别扭纠结", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "清醒拎得清，只和舒服的人相处", dim: "Db", tag: "Doubtless" }
+        ]},
+        { text: "没人懂你、情绪没地方说时？", options: [
+          { key: "A", label: "习惯性自己消化，独处才最放松", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "不太敢主动交心，害怕再次落空", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "深夜容易胡思乱想，白天自动自愈", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "无所谓，独处自由，慢慢等同频的人", dim: "Db", tag: "Doubtless" }
+        ]},
+        { text: "聊到恋爱和亲密关系，你是？", options: [
+          { key: "A", label: "单身也很香，不太需要依赖别人", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "容易被回忆困住，容易意难平", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "想爱又怕麻烦，反复纠结内耗", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "随缘恋爱，合得来就处，不合就散", dim: "Db", tag: "Doubtless" }
+        ]},
+        { text: "关系变淡、慢慢疏远时，你会？", options: [
+          { key: "A", label: "慢慢佛系看淡，降低所有期待", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "卡在遗憾里，放不下也回不去", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "反复翻看回忆，纠结好久才放下", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "接受渐行渐远，体面翻篇不纠缠", dim: "Db", tag: "Doubtless" }
+        ]},
+        { text: "想起那些没结果的人和事？", options: [
+          { key: "A", label: "感觉一切都平平淡淡，没什么兴致", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "总纠结当初没说出口的话和错过", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "偶尔怀念，但清楚只能止于回忆", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "往事翻篇，只往前走，不回头看", dim: "Db", tag: "Doubtless" }
+        ]},
+        { text: "对你来说，快乐属于？", options: [
+          { key: "A", label: "很奢侈，大多时候平平淡淡过日子", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "感情里的甜很短，遗憾反而更长", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "快乐很碎片，情绪忽高忽低", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "超简单！小美好就能瞬间治愈", dim: "Db", tag: "Doubtless" }
+        ]},
+        { text: "越长大，你看待世界的方式？", options: [
+          { key: "A", label: "看透太多，主打一个人间清醒佛系", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "对待感情越来越谨慎，不敢莽撞", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "接纳自己普通，偶尔焦虑偶尔摆烂", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "心态越来越稳，擅长发现小美好", dim: "Db", tag: "Doubtless" }
+        ]},
+        { text: "水逆低谷、事事不顺的时候？", options: [
+          { key: "A", label: "悄悄自闭，暂时和世界断联充电", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "容易 emo 破防，被情绪牵着走", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "先摆烂躺平，缓过来再慢慢发力", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "快速调整心态，低谷总会翻篇", dim: "Db", tag: "Doubtless" }
+        ]},
+        { text: "日常常态，更贴近哪种？", options: [
+          { key: "A", label: "偶尔放空发呆，有点游离感", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "容易被感情小事影响心情", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "想法超多，内心小剧场不停上演", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "作息规律，日常简单又治愈", dim: "Db", tag: "Doubtless" }
+        ]},
+        { text: "说起未来和期待，你的想法？", options: [
+          { key: "A", label: "走一步看一步，没什么远大规划", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "不太憧憬恋爱，怕失望怕受伤", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "偶尔做梦幻想，现实又很清醒", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "目标清晰，慢慢奔赴自己想要的生活", dim: "Db", tag: "Doubtless" }
+        ]},
+        { text: "一个人独处这件事，你怎么看？", options: [
+          { key: "A", label: "天生独行型，一个人最舒服自在", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "害怕孤单，又没办法好好拥抱别人", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "爱自由不想被管，又偶尔需要陪伴", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "独处舒服，合群也 OK，主打自适应", dim: "Db", tag: "Doubtless" }
+        ]},
+        { text: "经历越多，你悄悄学会？", options: [
+          { key: "A", label: "隐藏情绪，习惯安静不麻烦别人", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "克制心动，不会再随便上头", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "看淡得失，接受所有不确定性", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "保持热爱，永远相信温柔和好运", dim: "Db", tag: "Doubtless" }
+        ]},
+        { text: "成年人长大的代价，对你来说是？", options: [
+          { key: "A", label: "慢慢沉默，习惯自己扛所有事", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "收起天真，对待感情小心翼翼", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "和生活互相妥协，一边不甘一边将就", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "沉淀成长，变成温柔又强大的大人", dim: "Db", tag: "Doubtless" }
+        ]},
+        { text: "理想的生活状态，你更向往？", options: [
+          { key: "A", label: "安静低欲望，不被外界打扰", dim: "Hp", tag: "Helpless" },
+          { key: "B", label: "平淡安稳，不再被感情内耗", dim: "Hs", tag: "Hopeless" },
+          { key: "C", label: "随性自由，怎么舒服怎么来", dim: "Rs", tag: "Restless" },
+          { key: "D", label: "岁岁平安，日子温柔又有盼头", dim: "Db", tag: "Doubtless" }
+        ]}
+      ];
+
+      var elStem = document.getElementById("q-stem");
+      var elOpts = document.getElementById("q-opts");
+      var elNum = document.getElementById("q-num");
+      var elBar = document.getElementById("q-bar");
+      var elPrev = document.getElementById("btn-prev");
+      var elProg = document.getElementById("q-progress-wrap");
+      var quizPanel = document.getElementById("quiz-panel");
+      var donePanel = document.getElementById("done-panel");
+      var btnRestart = document.getElementById("btn-restart");
+
+      var answers = [];
+      try {
+        var raw = sessionStorage.getItem(KEY);
+        if (raw) answers = JSON.parse(raw);
+        if (!Array.isArray(answers) || answers.length > TOTAL) answers = [];
+      } catch (e) { answers = []; }
+
+      if (typeof location.search === "string" && /[?&]new=1(?:&|$)/.test(location.search)) {
+        try {
+          sessionStorage.removeItem(KEY);
+          localStorage.removeItem("fnd_quiz_last_result_v1");
+        } catch (e2) {}
+        answers = [];
+        if (typeof history.replaceState === "function") {
+          history.replaceState(null, "", location.pathname || "quiz.html");
+        }
+      }
+
+      var idx = answers.length;
+
+      function save() {
+        try {
+          sessionStorage.setItem(KEY, JSON.stringify(answers));
+        } catch (e) {}
+      }
+
+      function setProgress(n) {
+        var cur = n + 1;
+        if (elNum) elNum.textContent = String(cur);
+        if (elBar) elBar.style.width = (cur / TOTAL) * 100 + "%";
+        if (elProg) {
+          elProg.setAttribute("aria-valuenow", String(cur));
+          elProg.setAttribute("aria-valuetext", "第 " + cur + " 题，共 " + TOTAL + " 题");
+        }
+        if (elPrev) elPrev.disabled = n <= 0;
+      }
+
+      function render() {
+        if (idx < 0) idx = 0;
+        if (idx >= TOTAL) {
+          showDone();
+          return;
+        }
+        var q = QUIZ[idx];
+        setProgress(idx);
+        if (elStem) elStem.textContent = (idx + 1) + ". " + q.text;
+        elOpts.innerHTML = "";
+        q.options.forEach(function (o) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "opt";
+          btn.setAttribute("role", "option");
+          var spanK = document.createElement("span");
+          spanK.className = "k";
+          spanK.textContent = o.key + ".";
+          btn.appendChild(spanK);
+          btn.appendChild(document.createTextNode(" " + o.label));
+          var small = document.createElement("span");
+          small.className = "dim";
+          small.textContent = "「" + o.tag + "」";
+          btn.appendChild(small);
+          btn.addEventListener("click", function () { pick(o); });
+          elOpts.appendChild(btn);
+        });
+      }
+
+      function pick(o) {
+        answers[idx] = o.dim;
+        save();
+        idx += 1;
+        if (idx >= TOTAL) {
+          showDone();
+          return;
+        }
+        render();
+        window.scrollTo(0, 0);
+      }
+
+      function goPrev() {
+        if (idx <= 0) return;
+        idx -= 1;
+        answers.pop();
+        save();
+        render();
+        window.scrollTo(0, 0);
+      }
+
+      if (elPrev) elPrev.addEventListener("click", goPrev);
+
+      if (btnRestart) {
+        btnRestart.addEventListener("click", function () {
+          try {
+            sessionStorage.removeItem(KEY);
+          } catch (e) {}
+          try {
+            localStorage.removeItem("fnd_quiz_last_result_v1");
+          } catch (e2) {}
+          location.href = "quiz.html?new=1";
+        });
+      }
+
+      var SONGS = {
+        Hp: ["2001太空漫游", "人神斗", "当这地球没有花", "时代巨轮"],
+        Hs: ["兄妹", "心的距离", "我们", "红玫瑰"],
+        Rs: ["告别娑婆", "完", "好久不见", "任我行"],
+        Db: ["人生马拉松", "陪你度过漫长岁月", "路一直都在", "我们万岁"]
+      };
+      var RESULT_META = {
+        "2001太空漫游": { p: "宇宙疏离者", t: "困在无垠宇宙的失重里，与人间保持永久的距离。\n世间热闹皆与你无关，生来便习惯独自沉默漂浮。" },
+        人神斗: { p: "清醒局外人", t: "看尽世俗博弈与人情凉薄，一半冷眼观世，一半被迫妥协。\n你清醒地挣扎，在人性与现实之间孤身对峙。" },
+        当这地球没有花: { p: "荒芜悲观者", t: "温柔尽数凋零，浪漫归于沉寂。\n你见过世间荒芜的本质，从此对所有美好都不敢笃定。" },
+        时代巨轮: { p: "洪流失语者", t: "被时代巨轮推着前行，身不由己，无力反抗。\n藏起自我，淹没在人海浪潮里，安静随波逐流。" },
+        黑洞: { p: "深度压抑者", t: "情绪坠入无边黑洞，暗潮向内吞噬所有光亮。\n外表平静如常，内里早已困在无尽的荒芜深渊。" },
+        兄妹: { p: "暧昧困局者", t: "爱不得，舍不得，跨不过界限，走不近彼此。\n所有深情止于名分，是克制一生的意难平。" },
+        心的距离: { p: "情感隔阂者", t: "明明近在咫尺，心却隔着万水千山。\n爱意慢慢降温，隔阂生根，再也无法同频相拥。" },
+        我们: { p: "旧梦沉溺者", t: "后来没有我们，只剩回忆反复拉扯。\n年少遗憾封存在过往，余生只剩怀念与沉默。" },
+        红玫瑰: { p: "执念深情者", t: "得不到的永远难忘，意难平贯穿岁岁年年。\n温柔予人，遗憾自留，习惯性为爱内耗。" },
+        异梦: { p: "同床异梦者", t: "身在人间相伴，灵魂各自漂泊在不同梦境。\n看似安稳同行，实则从来无人真正懂你。" },
+        告别娑婆: { p: "尘世逃离者", t: "厌倦人间娑婆纷扰，总想挣脱世俗枷锁。\n在破碎与清醒间反复徘徊，渴望逃离一切束缚。" },
+        完: { p: "破碎自愈者", t: "一切走向落幕，情绪崩塌，生活归于荒芜。\n在绝境里独自蜷缩，慢慢消化所有崩塌与残缺。" },
+        好久不见: { p: "念旧独行者", t: "揣着旧人旧事安静前行，不打扰，不回望。\n温柔封存过往，只在某个瞬间，悄悄怀念从前。" },
+        任我行: { p: "自由独行客", t: "曾惧怕孤单，终学会一个人独行山河。\n看淡合群与热闹，独行于世，亦是一种圆满自在。" },
+        大人: { p: "成长通透者", t: "褪去年少莽撞，学会隐忍、包容、温柔自持。\n与生活握手言和，安静成为成熟且温柔的大人。" },
+        七百年后: { p: "岁月温柔者", t: "跨越漫长时光，爱意与温柔永不褪色。\n看淡短暂得失，以长久的温柔，对抗人间无常。" },
+        人生马拉松: { p: "坚韧前行者", t: "人生是一场漫长长跑，不必急于抵达终点。\n步履缓慢却坚定，熬过低谷，终会遇见回甘。" },
+        陪你度过漫长岁月: { p: "治愈陪伴者", t: "岁月漫长，风雨起落，总有人与你并肩。\n温柔接纳所有无常，在时光里慢慢安稳生长。" },
+        路一直都在: { p: "向阳前行者", t: "纵有迷雾与低谷，前路永远绵延向前。\n不惧坎坷，心怀坦荡，永远奔赴下一程山海。" },
+        我们万岁: { p: "圆满治愈者", t: "珍惜相遇，感恩同行，烟火寻常皆是浪漫。\n接纳所有圆满与不完美，岁岁安然，我们万岁。" }
+      };
+      var DIM_ORDER = ["Hp", "Hs", "Rs", "Db"];
+
+      function sumIdxFor(answers, dim) {
+        var s = 0;
+        for (var i = 0; i < answers.length; i++) {
+          if (answers[i] === dim) s += i + 1;
+        }
+        return s;
+      }
+
+      function firstTopDim(tops) {
+        for (var o = 0; o < DIM_ORDER.length; o++) {
+          if (tops.indexOf(DIM_ORDER[o]) >= 0) return DIM_ORDER[o];
+        }
+        return tops[0];
+      }
+
+      function pickVariant(answers, dim) {
+        var t = sumIdxFor(answers, dim);
+        return t % 4;
+      }
+
+      function resolveSongTitle(arr) {
+        if (!arr || arr.length < TOTAL) return "——";
+        var c = { Hp: 0, Hs: 0, Rs: 0, Db: 0 };
+        for (var i = 0; i < arr.length; i++) c[arr[i]] += 1;
+        var max = Math.max(c.Hp, c.Hs, c.Rs, c.Db);
+        var tops = [];
+        for (var d = 0; d < DIM_ORDER.length; d++) {
+          if (c[DIM_ORDER[d]] === max) tops.push(DIM_ORDER[d]);
+        }
+        if (tops.length === 1) {
+          var w1 = tops[0];
+          return SONGS[w1][pickVariant(arr, w1)];
+        }
+        if (tops.length === 2) {
+          var ra = tops[0];
+          var rb = tops[1];
+          if ((ra === "Hp" && rb === "Hs") || (ra === "Hs" && rb === "Hp")) return "黑洞";
+          if ((ra === "Hs" && rb === "Rs") || (ra === "Rs" && rb === "Hs")) return "异梦";
+          if ((ra === "Rs" && rb === "Db") || (ra === "Db" && rb === "Rs")) return "大人";
+          if ((ra === "Hp" && rb === "Db") || (ra === "Db" && rb === "Hp")) return "七百年后";
+          var w2 = firstTopDim(tops);
+          return SONGS[w2][pickVariant(arr, w2)];
+        }
+        var w3 = firstTopDim(tops);
+        return SONGS[w3][pickVariant(arr, w3)];
+      }
+
+      function showDone() {
+        var title = resolveSongTitle(answers);
+        var meta = RESULT_META[title] || { p: "——", t: "暂无可引用的短文案，请以歌名为准。" };
+        if (quizPanel) quizPanel.hidden = true;
+        if (donePanel) donePanel.hidden = false;
+        var el = document.getElementById("result-song");
+        if (el) el.textContent = "【" + title + "】";
+        var elP = document.getElementById("result-personality");
+        if (elP) elP.textContent = meta.p;
+        var elC = document.getElementById("result-copy");
+        if (elC) elC.textContent = meta.t;
+        try {
+          if (RESULT_META[title]) {
+            localStorage.setItem("fnd_quiz_last_result_v1", JSON.stringify({ t: title }));
+          }
+        } catch (e) {}
+        if (RESULT_META[title]) {
+          try {
+            var statKey = "fnd_quiz_stat_sent:" + title;
+            if (!sessionStorage.getItem(statKey)) {
+              fetch("/api/quiz/complete", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title: title }),
+                keepalive: true
+              }).then(function (res) {
+                if (res.ok) sessionStorage.setItem(statKey, "1");
+              }).catch(function () {});
+            }
+          } catch (e2) {}
+        }
+        window.scrollTo(0, 0);
+      }
+
+      if (idx >= TOTAL) {
+        showDone();
+      } else {
+        render();
+      }
+    })();
+  </script>
+</body>
+</html>

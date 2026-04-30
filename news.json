@@ -1,0 +1,16 @@
+{
+  "heading": "资讯",
+  "items": [
+    {
+      "date": "2026-04-28",
+      "tag": "共鸣测试",
+      "note": "Fnds共鸣测试上线后收到了不少EF老师的分享，很多 Fear，也有很多 Dreams。其实数字只是侧面，真正有意思的是大家分享的那句「好像被说中了」，这就是Fnds的共鸣呀~",
+      "statsAriaLabel": "同频数据快照",
+      "link": {
+        "href": "fndsquiz/stats-snapshot.html",
+        "text": "查看同频数据",
+        "newTab": false
+      }
+    }
+  ]
+}
