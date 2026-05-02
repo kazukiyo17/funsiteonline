@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Laufey Soul Spectrum 测试数据统计：累计次数、每日趋势与各单曲占比。" />
+  <title>数据统计 · Laufey Soul Spectrum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #faf7f2;
+      --cream-deep: #f3ebe3;
+      --caramel: #8b7355;
+      --caramel-deep: #6d5844;
+      --mint: #9eb8aa;
+      --gold-line: rgba(196, 165, 116, 0.42);
+      --ink: #3d3834;
+      --ink-soft: rgba(61, 56, 52, 0.62);
+      --card: rgba(255, 255, 255, 0.78);
+      --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.085'/%3E%3C/svg%3E");
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100dvh;
+      font-family: "Nunito", system-ui, sans-serif;
+      font-weight: 500;
+      color: var(--ink);
+      background-color: var(--cream-deep);
+      position: relative;
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 88% 62% at 50% 0%, rgba(232, 196, 184, 0.35), transparent 54%),
+        radial-gradient(ellipse 52% 40% at -5% 88%, rgba(158, 184, 170, 0.2), transparent 48%),
+        linear-gradient(172deg, var(--cream) 0%, var(--cream-deep) 52%, #ebe3d9 100%);
+      filter: saturate(0.93) contrast(0.97);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background: var(--grain);
+      opacity: 1;
+    }
+
+    .shell {
+      position: relative;
+      z-index: 2;
+      max-width: min(72rem, 100%);
+      margin: 0 auto;
+      padding: 1rem 1.15rem 2.5rem;
+    }
+
+    .top {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem 1rem;
+      margin-bottom: 1.35rem;
+    }
+
+    .brand__eyebrow {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--caramel);
+    }
+
+    .brand__title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.25rem, 3.5vw, 1.65rem);
+      font-weight: 600;
+      color: var(--caramel-deep);
+      letter-spacing: 0.02em;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .back,
+    .btn-ghost {
+      color: var(--caramel-deep);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 700;
+      background: none;
+      border: none;
+      font-family: inherit;
+      cursor: pointer;
+      padding: 0.35rem 0;
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      text-decoration: underline;
+    }
+
+    .btn-ghost:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .kpi {
+      padding: 1rem 1.1rem;
+      border-radius: 16px;
+      border: 1px solid var(--gold-line);
+      background: var(--card);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+    }
+
+    .kpi__label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--ink-soft);
+      margin-bottom: 0.35rem;
+    }
+
+    .kpi__value {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.6rem, 4vw, 2.1rem);
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+      color: var(--caramel-deep);
+    }
+
+    .kpi__sub {
+      font-size: 0.72rem;
+      color: var(--ink-soft);
+      margin-top: 0.35rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    @media (min-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+      }
+
+      .layout__wide {
+        grid-column: 1 / -1;
+      }
+    }
+
+    .card {
+      border-radius: 18px;
+      border: 1px solid var(--gold-line);
+      background: var(--card);
+      padding: 1.15rem 1.05rem 1rem;
+      box-shadow: 0 18px 44px -22px rgba(61, 56, 52, 0.14);
+    }
+
+    .card__head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.35rem 0.75rem;
+      margin-bottom: 0.85rem;
+      padding: 0 0.15rem;
+    }
+
+    .card__title {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--caramel-deep);
+    }
+
+    .card__note {
+      font-size: 0.72rem;
+      color: var(--ink-soft);
+    }
+
+    .chart-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 0 -0.25rem;
+      padding: 0 0.25rem 0.25rem;
+    }
+
+    .chart-svg {
+      display: block;
+      width: 100%;
+      min-width: 280px;
+      height: auto;
+      min-height: 200px;
+    }
+
+    .chart-svg text {
+      font-family: "Nunito", sans-serif;
+      font-size: 10px;
+      fill: rgba(61, 56, 52, 0.5);
+    }
+
+    .pie-wrap {
+      display: grid;
+      grid-template-columns: minmax(200px, 280px) minmax(0, 1fr);
+      gap: 1rem 1.25rem;
+      align-items: start;
+      padding-bottom: 0.35rem;
+    }
+
+    @media (max-width: 700px) {
+      .pie-wrap {
+        grid-template-columns: 1fr;
+        justify-items: center;
+      }
+    }
+
+    .pie-svg {
+      display: block;
+      width: 100%;
+      max-width: 280px;
+      height: auto;
+      aspect-ratio: 1;
+    }
+
+    .pie-legend {
+      display: flex;
+      flex-direction: column;
+      gap: 0.38rem;
+      width: 100%;
+      max-height: min(70vh, 52rem);
+      overflow-y: auto;
+      padding-right: 0.25rem;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(139, 115, 85, 0.35) transparent;
+    }
+
+    .legend-row {
+      display: grid;
+      grid-template-columns: 11px minmax(0, 1fr) 3.15rem 2.65rem;
+      gap: 0.35rem 0.45rem;
+      align-items: center;
+      font-size: 0.78rem;
+    }
+
+    @media (min-width: 480px) {
+      .legend-row {
+        grid-template-columns: 11px minmax(0, 1fr) 3.35rem 2.85rem;
+        font-size: 0.82rem;
+      }
+    }
+
+    .legend-row__dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-row__name {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .legend-row__pct {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      color: var(--caramel-deep);
+    }
+
+    .legend-row__n {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-size: 0.9em;
+      color: var(--ink-soft);
+    }
+
+    .day-table-wrap {
+      margin-top: 1rem;
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid rgba(196, 165, 116, 0.28);
+    }
+
+    .day-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+    }
+
+    .day-table th,
+    .day-table td {
+      padding: 0.55rem 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(196, 165, 116, 0.22);
+    }
+
+    .day-table th {
+      font-weight: 700;
+      color: var(--caramel-deep);
+      background: rgba(250, 247, 242, 0.9);
+    }
+
+    .day-table td:last-child {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+    }
+
+    .day-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .state {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+    }
+
+    .state--err {
+      color: #a65d5d;
+      font-weight: 600;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .updated {
+      font-size: 0.72rem;
+      color: rgba(61, 56, 52, 0.38);
+      margin-top: 1.5rem;
+      text-align: center;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="top">
+      <div class="brand">
+        <span class="brand__eyebrow">Soul Spectrum</span>
+        <h1 class="brand__title">测试数据统计</h1>
+      </div>
+      <div class="top-actions">
+        <button type="button" class="btn-ghost" id="btn-refresh" disabled>刷新</button>
+        <a class="back" href="index.html">← 返回首页</a>
+      </div>
+    </header>
+
+    <div id="state-loading" class="state">加载中…</div>
+    <div id="state-error" class="state state--err" hidden></div>
+
+    <div id="main" hidden>
+      <section class="kpis" aria-label="汇总">
+        <div class="kpi">
+          <p class="kpi__label">累计次数</p>
+          <p class="kpi__value" id="kpi-total">0</p>
+          <p class="kpi__sub">结果页上报汇总（各曲目各日之和）</p>
+        </div>
+        <div class="kpi">
+          <p class="kpi__label">统计天数</p>
+          <p class="kpi__value" id="kpi-days">0</p>
+          <p class="kpi__sub">KV 中有记录的日历日数量</p>
+        </div>
+      </section>
+
+      <div class="layout">
+        <section class="card layout__wide" aria-labelledby="h-day">
+          <div class="card__head">
+            <h2 class="card__title" id="h-day">每日数量</h2>
+            <span class="card__note" id="day-note">—</span>
+          </div>
+          <div class="chart-wrap">
+            <svg class="chart-svg" id="chart-day" viewBox="0 0 640 220" role="img" aria-label="每日完成次数"></svg>
+          </div>
+          <div class="day-table-wrap">
+            <table class="day-table" aria-label="每日次数表">
+              <thead>
+                <tr><th>日期</th><th>次数</th></tr>
+              </thead>
+              <tbody id="day-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card layout__wide" aria-labelledby="h-res">
+          <div class="card__head">
+            <h2 class="card__title" id="h-res">各单曲总数与占比</h2>
+            <span class="card__note">环形图相对累计次数</span>
+          </div>
+          <div class="pie-wrap">
+            <svg class="chart-svg pie-svg" id="chart-pie" viewBox="0 0 280 280" role="img" aria-label="各单曲占比"></svg>
+            <div class="pie-legend" id="pie-legend"></div>
+          </div>
+        </section>
+      </div>
+
+      <p class="updated" id="updated-at"></p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var API = "/api/laufey/stats";
+
+      var elLoading = document.getElementById("state-loading");
+      var elError = document.getElementById("state-error");
+      var elMain = document.getElementById("main");
+      var elRefresh = document.getElementById("btn-refresh");
+      var elKpiTotal = document.getElementById("kpi-total");
+      var elKpiDays = document.getElementById("kpi-days");
+      var elDayNote = document.getElementById("day-note");
+      var elChartDay = document.getElementById("chart-day");
+      var elChartPie = document.getElementById("chart-pie");
+      var elPieLegend = document.getElementById("pie-legend");
+      var elDayTable = document.getElementById("day-table-body");
+      var elUpdated = document.getElementById("updated-at");
+
+      function showLoading(on) {
+        elLoading.hidden = !on;
+      }
+
+      function showError(msg) {
+        elError.textContent = msg || "加载失败";
+        elError.hidden = false;
+        elMain.hidden = true;
+      }
+
+      function hideError() {
+        elError.hidden = true;
+      }
+
+      function formatNow() {
+        var d = new Date();
+        var pad = function (n) { return n < 10 ? "0" + n : String(n); };
+        return (
+          d.getFullYear() +
+          "-" +
+          pad(d.getMonth() + 1) +
+          "-" +
+          pad(d.getDate()) +
+          " " +
+          pad(d.getHours()) +
+          ":" +
+          pad(d.getMinutes())
+        );
+      }
+
+      function sortDaysAsc(arr) {
+        var copy = arr.slice();
+        copy.sort(function (a, b) {
+          return a.date < b.date ? -1 : a.date > b.date ? 1 : 0;
+        });
+        return copy;
+      }
+
+      function renderDayTable(daysDesc) {
+        elDayTable.innerHTML = "";
+        if (!daysDesc.length) {
+          var tr = document.createElement("tr");
+          var td = document.createElement("td");
+          td.colSpan = 2;
+          td.style.textAlign = "center";
+          td.style.color = "rgba(61,56,52,0.45)";
+          td.style.padding = "1rem";
+          td.textContent = "暂无每日数据";
+          tr.appendChild(td);
+          elDayTable.appendChild(tr);
+          return;
+        }
+        for (var i = 0; i < daysDesc.length; i++) {
+          var row = daysDesc[i];
+          var tr2 = document.createElement("tr");
+          var tdD = document.createElement("td");
+          tdD.textContent = row.date;
+          var tdC = document.createElement("td");
+          tdC.textContent = String(row.count);
+          tr2.appendChild(tdD);
+          tr2.appendChild(tdC);
+          elDayTable.appendChild(tr2);
+        }
+      }
+
+      function drawDayChart(svg, days) {
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+
+        var W = 640;
+        var H = 220;
+        var padL = 36;
+        var padR = 12;
+        var padT = 14;
+        var padB = 44;
+
+        var innerW = W - padL - padR;
+        var innerH = H - padT - padB;
+
+        if (!days.length) {
+          var empty = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          empty.setAttribute("x", String(W / 2));
+          empty.setAttribute("y", String(H / 2));
+          empty.setAttribute("text-anchor", "middle");
+          empty.setAttribute("fill", "rgba(61,56,52,0.45)");
+          empty.textContent = "暂无每日数据";
+          svg.appendChild(empty);
+          return;
+        }
+
+        var slice = days.length > 45 ? days.slice(-45) : days;
+        elDayNote.textContent = "共 " + slice.length + " 天 · 横轴由旧到新";
+
+        var maxY = 0;
+        for (var i = 0; i < slice.length; i++) {
+          if (slice[i].count > maxY) maxY = slice[i].count;
+        }
+        if (maxY < 1) maxY = 1;
+
+        var n = slice.length;
+        var dx = n > 1 ? innerW / (n - 1) : 0;
+
+        function xAt(idx) {
+          return padL + idx * dx;
+        }
+
+        function yAt(v) {
+          return padT + innerH * (1 - v / maxY);
+        }
+
+        var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+        var grad = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+        grad.setAttribute("id", "laufeyAreaGrad");
+        grad.setAttribute("x1", "0");
+        grad.setAttribute("y1", "0");
+        grad.setAttribute("x2", "0");
+        grad.setAttribute("y2", "1");
+        var s1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+        s1.setAttribute("offset", "0%");
+        s1.setAttribute("stop-color", "#9eb8aa");
+        s1.setAttribute("stop-opacity", "0.35");
+        var s2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+        s2.setAttribute("offset", "100%");
+        s2.setAttribute("stop-color", "#faf7f2");
+        s2.setAttribute("stop-opacity", "0");
+        grad.appendChild(s1);
+        grad.appendChild(s2);
+        defs.appendChild(grad);
+        svg.appendChild(defs);
+
+        var gridSteps = 4;
+        for (var g = 0; g <= gridSteps; g++) {
+          var gv = (maxY * g) / gridSteps;
+          var gy = yAt(gv);
+          var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+          line.setAttribute("x1", String(padL));
+          line.setAttribute("y1", String(gy));
+          line.setAttribute("x2", String(W - padR));
+          line.setAttribute("y2", String(gy));
+          line.setAttribute("stroke", "rgba(61,56,52,0.08)");
+          line.setAttribute("stroke-width", "1");
+          svg.appendChild(line);
+          var t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          t.setAttribute("x", String(padL - 6));
+          t.setAttribute("y", String(gy + 4));
+          t.setAttribute("text-anchor", "end");
+          t.textContent = String(Math.round(gv));
+          svg.appendChild(t);
+        }
+
+        var pathD = "";
+        var areaD = "";
+        for (var p = 0; p < n; p++) {
+          var cx = xAt(p);
+          var cy = yAt(slice[p].count);
+          pathD += (p === 0 ? "M " : " L ") + cx.toFixed(2) + " " + cy.toFixed(2);
+        }
+        if (n > 0) {
+          areaD =
+            pathD +
+            " L " +
+            xAt(n - 1).toFixed(2) +
+            " " +
+            (padT + innerH).toFixed(2) +
+            " L " +
+            padL.toFixed(2) +
+            " " +
+            (padT + innerH).toFixed(2) +
+            " Z";
+        }
+
+        var area = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        area.setAttribute("d", areaD);
+        area.setAttribute("fill", "url(#laufeyAreaGrad)");
+        svg.appendChild(area);
+
+        var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("d", pathD);
+        path.setAttribute("fill", "none");
+        path.setAttribute("stroke", "#8b7355");
+        path.setAttribute("stroke-width", "2");
+        path.setAttribute("stroke-linecap", "round");
+        path.setAttribute("stroke-linejoin", "round");
+        svg.appendChild(path);
+
+        for (var q = 0; q < n; q++) {
+          var dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          dot.setAttribute("cx", String(xAt(q)));
+          dot.setAttribute("cy", String(yAt(slice[q].count)));
+          dot.setAttribute("r", "3.5");
+          dot.setAttribute("fill", "#e8c4b8");
+          dot.setAttribute("stroke", "#6d5844");
+          dot.setAttribute("stroke-width", "1");
+          var title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+          title.textContent = slice[q].date + " · " + slice[q].count + " 次";
+          dot.appendChild(title);
+          svg.appendChild(dot);
+        }
+
+        var tickEvery = n <= 10 ? 1 : n <= 20 ? 2 : n <= 35 ? 3 : Math.ceil(n / 12);
+        for (var ti = 0; ti < n; ti += tickEvery) {
+          var lab = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          lab.setAttribute("x", String(xAt(ti)));
+          lab.setAttribute("y", String(H - 18));
+          lab.setAttribute("text-anchor", "middle");
+          var ds = slice[ti].date;
+          if (ds.length >= 10) ds = ds.slice(5);
+          lab.textContent = ds;
+          svg.appendChild(lab);
+        }
+      }
+
+      function colorForSlug(slug) {
+        var n = parseInt(String(slug).replace(/^s/, ""), 10);
+        if (!isFinite(n) || n < 1) n = 1;
+        var h = ((n - 1) * 47 + 22) % 360;
+        var s = 38 + ((n - 1) % 4) * 6;
+        var l = 42 + ((n - 1) % 5) * 4;
+        return "hsl(" + h + ", " + s + "%, " + l + "%)";
+      }
+
+      function donutSlicePath(cx, cy, r0, r1, a0, a1) {
+        var x0o = cx + r0 * Math.cos(a0);
+        var y0o = cy + r0 * Math.sin(a0);
+        var x1o = cx + r0 * Math.cos(a1);
+        var y1o = cy + r0 * Math.sin(a1);
+        var x0i = cx + r1 * Math.cos(a1);
+        var y0i = cy + r1 * Math.sin(a1);
+        var x1i = cx + r1 * Math.cos(a0);
+        var y1i = cy + r1 * Math.sin(a0);
+        var large = a1 - a0 > Math.PI ? 1 : 0;
+        return (
+          "M " +
+          x0o +
+          " " +
+          y0o +
+          " A " +
+          r0 +
+          " " +
+          r0 +
+          " 0 " +
+          large +
+          " 1 " +
+          x1o +
+          " " +
+          y1o +
+          " L " +
+          x0i +
+          " " +
+          y0i +
+          " A " +
+          r1 +
+          " " +
+          r1 +
+          " 0 " +
+          large +
+          " 0 " +
+          x1i +
+          " " +
+          y1i +
+          " Z"
+        );
+      }
+
+      function drawPieChart(svg, rows, sum) {
+        while (svg.firstChild) svg.removeChild(svg.firstChild);
+        var ns = "http://www.w3.org/2000/svg";
+        var cx = 140;
+        var cy = 140;
+        var rOut = 118;
+        var rIn = 64;
+
+        if (!sum || sum < 1) {
+          var empty = document.createElementNS(ns, "text");
+          empty.setAttribute("x", "140");
+          empty.setAttribute("y", "142");
+          empty.setAttribute("text-anchor", "middle");
+          empty.setAttribute("fill", "rgba(61,56,52,0.35)");
+          empty.setAttribute("font-size", "13");
+          empty.textContent = "暂无数据";
+          svg.appendChild(empty);
+          return;
+        }
+
+        var angle = -Math.PI / 2;
+        for (var i = 0; i < rows.length; i++) {
+          var row = rows[i];
+          var c = row.count;
+          if (!c) continue;
+          var da = (c / sum) * 2 * Math.PI;
+          var a0 = angle;
+          var a1 = angle + da;
+          angle = a1;
+
+          var path = document.createElementNS(ns, "path");
+          path.setAttribute("d", donutSlicePath(cx, cy, rOut, rIn, a0, a1));
+          path.setAttribute("fill", colorForSlug(row.slug));
+          path.setAttribute("stroke", "rgba(61,56,52,0.12)");
+          path.setAttribute("stroke-width", "1.25");
+          path.setAttribute("stroke-linejoin", "round");
+          var hint = document.createElementNS(ns, "title");
+          hint.textContent = row.title + " · " + c + " · " + row.percent + "%";
+          path.appendChild(hint);
+          svg.appendChild(path);
+        }
+
+        var holeNum = document.createElementNS(ns, "text");
+        holeNum.setAttribute("x", "140");
+        holeNum.setAttribute("y", "134");
+        holeNum.setAttribute("text-anchor", "middle");
+        holeNum.setAttribute("fill", "#6d5844");
+        holeNum.setAttribute("font-size", "17");
+        holeNum.setAttribute("font-weight", "600");
+        holeNum.textContent = String(sum);
+        svg.appendChild(holeNum);
+
+        var holeLab = document.createElementNS(ns, "text");
+        holeLab.setAttribute("x", "140");
+        holeLab.setAttribute("y", "154");
+        holeLab.setAttribute("text-anchor", "middle");
+        holeLab.setAttribute("fill", "rgba(61,56,52,0.45)");
+        holeLab.setAttribute("font-size", "10");
+        holeLab.textContent = "累计";
+        svg.appendChild(holeLab);
+      }
+
+      function renderPieLegend(container, rows, sum) {
+        container.innerHTML = "";
+        for (var r = 0; r < rows.length; r++) {
+          var row = rows[r];
+          var pct = sum > 0 ? row.percent : 0;
+          var wrap = document.createElement("div");
+          wrap.className = "legend-row";
+          var dot = document.createElement("div");
+          dot.className = "legend-row__dot";
+          dot.style.background =
+            row.count > 0 ? colorForSlug(row.slug) : "rgba(61,56,52,0.12)";
+          var name = document.createElement("div");
+          name.className = "legend-row__name";
+          name.textContent = row.title;
+          name.title = row.title;
+          var pEl = document.createElement("div");
+          pEl.className = "legend-row__pct";
+          pEl.textContent = pct.toFixed(pct < 10 && pct > 0 ? 1 : 0) + "%";
+          var nEl = document.createElement("div");
+          nEl.className = "legend-row__n";
+          nEl.textContent = String(row.count);
+          wrap.appendChild(dot);
+          wrap.appendChild(name);
+          wrap.appendChild(pEl);
+          wrap.appendChild(nEl);
+          container.appendChild(wrap);
+        }
+      }
+
+      function render(data) {
+        var total = Number(data.total) || Number(data.sumResult) || 0;
+        var days = sortDaysAsc(data.byDay || []);
+        var daysDesc = days.slice().sort(function (a, b) {
+          return a.date < b.date ? 1 : a.date > b.date ? -1 : 0;
+        });
+
+        elKpiTotal.textContent = String(total);
+        elKpiDays.textContent = String(
+          data.dayCount != null ? data.dayCount : days.length
+        );
+
+        if (data.listUnavailable) {
+          elDayNote.textContent =
+            data.listUnavailableDetail === "kv.list_not_supported"
+              ? "当前环境不支持列举键"
+              : "列表数据暂不可用";
+        } else if (!days.length && total > 0) {
+          elDayNote.textContent = "每日明细不可用（请确认 KV 支持 list）";
+        } else if (!days.length) {
+          elDayNote.textContent = "尚无上报记录";
+        }
+
+        drawDayChart(elChartDay, days);
+        renderDayTable(daysDesc);
+        drawPieChart(elChartPie, data.byResult || [], total);
+        renderPieLegend(elPieLegend, data.byResult || [], total);
+        elUpdated.textContent = "更新时间 · " + formatNow();
+      }
+
+      function load() {
+        showLoading(true);
+        hideError();
+        elMain.hidden = true;
+        if (elRefresh) elRefresh.disabled = true;
+
+        fetch(API, { credentials: "same-origin" })
+          .then(function (res) {
+            return res.json().then(function (body) {
+              return { ok: res.ok, body: body };
+            });
+          })
+          .then(function (out) {
+            showLoading(false);
+            if (elRefresh) elRefresh.disabled = false;
+
+            if (!out.body || !out.body.ok) {
+              var err =
+                out.body && out.body.error === "KV_not_bound_set_laufeyquizstats"
+                  ? "服务端未绑定 KV（laufeyquizstats），暂无法读取统计。"
+                  : "无法加载统计数据。";
+              showError(err);
+              return;
+            }
+
+            elMain.hidden = false;
+            render(out.body);
+          })
+          .catch(function () {
+            showLoading(false);
+            if (elRefresh) elRefresh.disabled = false;
+            showError("网络异常，请稍后重试。");
+          });
+      }
+
+      if (elRefresh) {
+        elRefresh.addEventListener("click", function () {
+          load();
+        });
+      }
+
+      load();
+    })();
+  </script>
+</body>
+</html>

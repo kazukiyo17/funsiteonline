@@ -1,0 +1,140 @@
+{
+  "dimensionLabels": {
+    "A": "怀旧沉溺型 · 感性念旧",
+    "B": "浪漫理想型 · 梦幻浪漫",
+    "C": "秩序克制派 · 理性内省",
+    "D": "自我觉醒系 · 独立强势"
+  },
+  "songsByDimension": {
+    "A": [
+      "Carousel",
+      "Forget-Me-Not",
+      "Too Little, Too Late",
+      "Castle in Hollywood",
+      "Letter To My 13 Year Old Self"
+    ],
+    "B": [
+      "Dreamer",
+      "Lover Girl",
+      "Valentine (Jazz Version)",
+      "From the Start"
+    ],
+    "C": [
+      "Clockwork",
+      "Falling Behind",
+      "Silver Lining",
+      "Bored",
+      "Promise"
+    ],
+    "D": [
+      "Mr. Eclectic",
+      "Goddess",
+      "Tough Luck",
+      "Snow White",
+      "Sabotage",
+      "Let You Break My Heart Again"
+    ]
+  },
+  "songCopy": {
+    "Carousel": {
+      "persona": "旋转木马人格",
+      "blurb": "循环往复的怀旧浪漫家，一生都在和回忆温柔相拥。",
+      "lyricEn": "Carousel spinning around, nowhere to go."
+    },
+    "Forget-Me-Not": {
+      "persona": "勿忘我人格",
+      "blurb": "深情执念者，认定的人与回忆，永远不会遗忘。",
+      "lyricEn": "I've sacrificed you, all of you, completely."
+    },
+    "Too Little, Too Late": {
+      "persona": "遗憾宿命人格",
+      "blurb": "被错过困住的温柔灵魂，总在遗憾里自我拉扯。",
+      "lyricEn": "'Cause it's too little, way too late."
+    },
+    "Castle in Hollywood": {
+      "persona": "幻梦城堡人格",
+      "blurb": "守护青春纯粹，惋惜美好时光逐渐褪色。",
+      "lyricEn": "We're just kids in our castle in Hollywood."
+    },
+    "Letter To My 13 Year Old Self": {
+      "persona": "时光信使人格",
+      "blurb": "和年少自我和解，温柔拥抱所有敏感。",
+      "lyricEn": "Dear thirteen-year-old me, I'm sorry."
+    },
+    "Dreamer": {
+      "persona": "造梦家人格",
+      "blurb": "永远活在浪漫幻想里，用想象力治愈现实。",
+      "lyricEn": "I'm a dreamer, I'll dream my life away."
+    },
+    "Lover Girl": {
+      "persona": "热恋少女人格",
+      "blurb": "为爱勇敢奔赴，浪漫是刻在骨子里的本能。",
+      "lyricEn": "I'm a lover girl, I fall in love too easily."
+    },
+    "Valentine (Jazz Version)": {
+      "persona": "爵士情书人格",
+      "blurb": "自带复古氛围感，温柔细腻的浪漫诗人。",
+      "lyricEn": "Will you be my Valentine?"
+    },
+    "From the Start": {
+      "persona": "初心纯粹人格",
+      "blurb": "永远带着赤诚初心，从一开始就相信美好。",
+      "lyricEn": "Don't you notice how I get quiet when there's no one else around?"
+    },
+    "Clockwork": {
+      "persona": "精密时钟人格",
+      "blurb": "人生如钟表，偏爱秩序、规律与稳定。",
+      "lyricEn": "Like clockwork, I fall apart every night."
+    },
+    "Falling Behind": {
+      "persona": "独行步调人格",
+      "blurb": "不追赶世俗节奏，专注自己的人生步调。",
+      "lyricEn": "Everyone's moving faster than me, I'm falling behind."
+    },
+    "Silver Lining": {
+      "persona": "微光自愈人格",
+      "blurb": "低谷里永远寻找希望，理性自我治愈。",
+      "lyricEn": "There's a silver lining somewhere in this storm."
+    },
+    "Bored": {
+      "persona": "慵懒内省人格",
+      "blurb": "享受无聊与独处，在松弛里获得内心平静。",
+      "lyricEn": "I'm bored, oh I'm bored—nothing hits like before."
+    },
+    "Promise": {
+      "persona": "一诺千金人格",
+      "blurb": "极度重诺守信，理性坚守每一个约定。",
+      "lyricEn": "You made me a promise, now you're breaking it."
+    },
+    "Mr. Eclectic": {
+      "persona": "异类独行人格",
+      "blurb": "小众独特、不被世俗定义，活成自己的样子。",
+      "lyricEn": "They call me Mr. Eclectic—I don't fit in one box."
+    },
+    "Goddess": {
+      "persona": "女王觉醒人格",
+      "blurb": "自我价值完全由自己定义，自信耀眼、独立强大。",
+      "lyricEn": "I'm a goddess on stage, human when we're alone."
+    },
+    "Tough Luck": {
+      "persona": "倔强勇者人格",
+      "blurb": "越挫越勇，从不向命运妥协。",
+      "lyricEn": "Tough luck, baby—I bend but I don't break."
+    },
+    "Snow White": {
+      "persona": "反叛公主人格",
+      "blurb": "拒绝世俗审美绑架，坚持自我、清醒独立。",
+      "lyricEn": "Mirrors tell lies to me, my mind just plays along."
+    },
+    "Sabotage": {
+      "persona": "清醒破坏人格",
+      "blurb": "敢于打破内耗与枷锁，主动掌控人生。",
+      "lyricEn": "I get in my head so easily—I'm my worst enemy."
+    },
+    "Let You Break My Heart Again": {
+      "persona": "无畏爱人人格",
+      "blurb": "受过伤害，依然敢爱敢恨，忠于本心。",
+      "lyricEn": "I'll let you break my heart again."
+    }
+  }
+}
