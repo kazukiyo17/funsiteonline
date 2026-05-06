@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>选择宠物类型 · 萌宠 MBTI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/pets-theme.css" />
+    <style>
+      .page-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+      }
+      .page-head h1 {
+        margin: 0;
+        font-size: clamp(1.35rem, 4vw, 1.65rem);
+        color: var(--orange-600);
+      }
+      .pick-grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 1fr;
+      }
+      @media (min-width: 560px) {
+        .pick-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      .pick-card {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+        background: var(--white);
+        border-radius: var(--radius-md);
+        padding: 1.35rem 1rem;
+        border: 3px solid var(--orange-100);
+        box-shadow: var(--shadow-card);
+        transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+        text-align: center;
+      }
+      .pick-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--orange-300);
+        box-shadow: var(--shadow-soft);
+      }
+      .pick-emoji {
+        font-size: 3rem;
+        line-height: 1;
+        margin-bottom: 0.35rem;
+      }
+      .pick-card h2 {
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+        color: var(--orange-600);
+        margin: 0 0 0.35rem;
+      }
+      .pick-card p {
+        margin: 0;
+        font-size: 0.88rem;
+        color: var(--ink-soft);
+        line-height: 1.45;
+      }
+      .section-title {
+        margin: 0 0 1rem;
+        font-size: 1.35rem;
+        color: var(--orange-600);
+        text-align: center;
+        font-family: var(--font-display);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-wrap">
+      <div class="page-head">
+        <h1>🐾 选择宠物类型</h1>
+        <a class="btn btn-ghost" href="index.html">← 返回封面</a>
+      </div>
+
+      <section class="card">
+        <h2 class="section-title">你要测哪一种毛孩子？</h2>
+        <div class="pick-grid">
+          <a class="pick-card" href="quiz.html?pet=cat">
+            <div class="pick-emoji" aria-hidden="true">🐱</div>
+            <h2>猫咪</h2>
+            <p>呼噜、贴贴、沙发底社交现场，解锁独特猫格。</p>
+          </a>
+          <a class="pick-card" href="quiz.html?pet=dog">
+            <div class="pick-emoji" aria-hidden="true">🐶</div>
+            <h2>狗狗</h2>
+            <p>遛弯、飞盘、尾巴雷达，看看修勾的狗格底色。</p>
+          </a>
+          <a class="pick-card" href="quiz.html?pet=parrot">
+            <div class="pick-emoji" aria-hidden="true">🦜</div>
+            <h2>鹦鹉</h2>
+            <p>喳喳、贴贴、笼内探险家，鸟宝也要有鸟格名片。</p>
+          </a>
+        </div>
+      </section>
+
+      <p class="footer-note">结果仅供娱乐 · 不构成行为或训练建议</p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>KV 统计 · 萌宠 MBTI（内部）</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/pets-theme.css" />
+    <style>
+      .page-title {
+        margin: 0 0 1rem;
+        font-size: clamp(1.15rem, 4vw, 1.45rem);
+        color: var(--orange-600);
+      }
+      .summary-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin-bottom: 1.25rem;
+      }
+      .summary-pill {
+        background: var(--orange-50);
+        border: 2px solid var(--orange-200);
+        border-radius: 999px;
+        padding: 0.45rem 0.85rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--ink);
+      }
+      .summary-pill strong {
+        color: var(--orange-600);
+      }
+      .stats-table-wrap {
+        overflow-x: auto;
+        margin-top: 0.5rem;
+      }
+      .stats-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.88rem;
+      }
+      .stats-table th,
+      .stats-table td {
+        padding: 0.55rem 0.5rem;
+        text-align: left;
+        border-bottom: 1px solid var(--orange-100);
+      }
+      .stats-table th {
+        font-family: var(--font-display);
+        color: var(--orange-600);
+        font-weight: 600;
+        font-size: 0.82rem;
+      }
+      .stats-table td:first-child {
+        font-weight: 700;
+        color: var(--orange-600);
+        letter-spacing: 0.06em;
+      }
+      .bar-cell {
+        min-width: 120px;
+      }
+      .bar-track {
+        height: 10px;
+        background: var(--orange-100);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--orange-300), var(--orange-500));
+        border-radius: 999px;
+        min-width: 4px;
+      }
+      .empty-hint,
+      .error-hint {
+        color: var(--ink-soft);
+        line-height: 1.65;
+        margin: 0;
+      }
+      .error-hint {
+        color: #9f1239;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-wrap">
+      <h1 class="page-title">📊 EdgeOne KV · 萌宠 MBTI 结果统计（内部）</h1>
+
+      <div class="card" id="stats-card">
+        <p id="stats-loading" class="empty-hint">加载中…</p>
+        <p id="stats-error" class="error-hint" hidden></p>
+        <p id="stats-empty" class="empty-hint" hidden>暂无 KV 记录（尚无完成上报或键为空）。</p>
+        <div id="stats-body" hidden>
+          <div class="summary-row" id="summary-row"></div>
+          <p style="margin: 0 0 0.35rem; font-size: 0.82rem; color: var(--ink-soft)">
+            按「宠物 + 四字母」汇总；占比为占「全部完成次数」的比例。下列仅列出次数 &gt; 0 的组合。
+          </p>
+          <div class="stats-table-wrap">
+            <table class="stats-table" aria-label="KV 类型分布">
+              <thead>
+                <tr>
+                  <th scope="col">类型</th>
+                  <th scope="col">宠物</th>
+                  <th scope="col">次数</th>
+                  <th scope="col">占比</th>
+                  <th class="bar-cell" scope="col">分布</th>
+                </tr>
+              </thead>
+              <tbody id="stats-tbody"></tbody>
+            </table>
+          </div>
+          <p id="stats-zero-note" class="empty-hint" style="margin-top: 0.75rem; font-size: 0.78rem" hidden></p>
+          <p class="footer-note" style="margin-top: 1.25rem; margin-bottom: 0">
+            数据来自 EdgeOne Pages KV（petsmbti_quiz_kv）· 本页不挂载对外入口 · <code>GET /api/petsmbti/stats</code>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/fetch-stats.js"></script>
+    <script>
+      (function () {
+        var PET = {
+          cat: { emoji: "🐱", label: "猫咪" },
+          dog: { emoji: "🐶", label: "狗狗" },
+          parrot: { emoji: "🦜", label: "鹦鹉" },
+        };
+
+        var loadingEl = document.getElementById("stats-loading");
+        var errorEl = document.getElementById("stats-error");
+        var emptyEl = document.getElementById("stats-empty");
+        var bodyEl = document.getElementById("stats-body");
+        var tbody = document.getElementById("stats-tbody");
+        var summaryRow = document.getElementById("summary-row");
+        var zeroNote = document.getElementById("stats-zero-note");
+
+        function fail(msg) {
+          loadingEl.hidden = true;
+          errorEl.textContent = msg;
+          errorEl.hidden = false;
+        }
+
+        fetchPetsmbtiStats().then(function (res) {
+            loadingEl.hidden = true;
+            var data = res.data;
+            if (!data || !data.ok) {
+              fail(
+                "接口异常：" +
+                  (data && data.error ? data.error : "unknown") +
+                  (data && data.detail ? " · " + data.detail : "") +
+                  "。请确认已绑定 KV 变量名 petsmbti_quiz_kv。"
+              );
+              return;
+            }
+
+            var total = data.total || 0;
+            var byPet = data.byPet || {};
+
+            if (total < 1) {
+              emptyEl.hidden = false;
+              return;
+            }
+
+            bodyEl.hidden = false;
+            summaryRow.innerHTML =
+              '<span class="summary-pill">KV 累计完成 <strong>' +
+              total +
+              "</strong> 次</span>" +
+              ["cat", "dog", "parrot"]
+                .map(function (p) {
+                  var n = byPet[p] || 0;
+                  var meta = PET[p] || { emoji: "🐾", label: p };
+                  return (
+                    '<span class="summary-pill">' + meta.emoji + " " + meta.label + " <strong>" + n + "</strong> 次</span>"
+                  );
+                })
+                .join("");
+
+            var combos = (data.combos || []).filter(function (row) {
+              return row.count > 0;
+            });
+            var maxCount = combos.length ? combos[0].count : 1;
+
+            if (combos.length === 0) {
+              zeroNote.textContent = "有总计数但无分项键（请检查 complete 写入是否与 stats 读取一致）。";
+              zeroNote.hidden = false;
+            }
+
+            tbody.innerHTML = combos
+              .map(function (row) {
+                var meta = PET[row.pet] || { emoji: "", label: row.pet };
+                var pct = typeof row.percentTotal === "number" ? row.percentTotal : 0;
+                var w = Math.round((row.count / maxCount) * 100);
+                return (
+                  "<tr><td>" +
+                  row.code +
+                  "</td><td>" +
+                  meta.emoji +
+                  " " +
+                  meta.label +
+                  "</td><td>" +
+                  row.count +
+                  "</td><td>" +
+                  pct +
+                  "%</td><td class=\"bar-cell\"><div class=\"bar-track\" aria-hidden=\"true\"><div class=\"bar-fill\" style=\"width:" +
+                  w +
+                  '%"></div></div></td></tr>'
+                );
+              })
+              .join("");
+          })
+          .catch(function (err) {
+            fail("请求失败：" + (err && err.message ? err.message : String(err)));
+          });
+      })();
+    </script>
+  </body>
+</html>

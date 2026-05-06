@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>萌宠 MBTI 小测试</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/pets-theme.css" />
+    <style>
+      .hero {
+        text-align: center;
+        padding: 0.5rem 0 1rem;
+      }
+      .hero-illus {
+        margin: 0 auto 1rem;
+        max-width: 280px;
+      }
+      .hero h1 {
+        font-size: clamp(1.75rem, 5vw, 2.35rem);
+        color: var(--orange-600);
+        margin: 0 0 0.5rem;
+        line-height: 1.2;
+      }
+      .hero-lead {
+        color: var(--ink-soft);
+        font-size: 1.05rem;
+        line-height: 1.65;
+        margin: 0 auto 1.75rem;
+        max-width: 34rem;
+      }
+      .cta-wrap {
+        display: flex;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-wrap">
+      <header class="hero">
+        <div class="hero-illus" aria-hidden="true">
+          <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="160" cy="170" rx="120" ry="22" fill="#fed7aa" opacity="0.6" />
+            <circle cx="90" cy="95" r="38" fill="#fb923c" />
+            <path d="M62 62 L78 38 L95 58 Z" fill="#ea580c" />
+            <path d="M118 62 L102 38 L85 58 Z" fill="#ea580c" />
+            <circle cx="78" cy="88" r="5" fill="#3f2e28" />
+            <circle cx="102" cy="88" r="5" fill="#3f2e28" />
+            <path d="M85 102 Q95 108 105 102" stroke="#3f2e28" stroke-width="3" fill="none" stroke-linecap="round" />
+            <ellipse cx="230" cy="100" rx="44" ry="36" fill="#fdba74" />
+            <ellipse cx="200" cy="88" rx="12" ry="18" fill="#fdba74" transform="rotate(-20 200 88)" />
+            <ellipse cx="260" cy="88" rx="12" ry="18" fill="#fdba74" transform="rotate(20 260 88)" />
+            <circle cx="218" cy="98" r="4" fill="#3f2e28" />
+            <circle cx="242" cy="98" r="4" fill="#3f2e28" />
+            <ellipse cx="230" cy="112" rx="10" ry="6" fill="#ea580c" />
+            <circle cx="160" cy="118" r="26" fill="#f97316" />
+            <path d="M148 108 L154 98 L160 108 Z" fill="#fff7ed" />
+            <path d="M166 108 L172 98 L178 108 Z" fill="#fff7ed" />
+            <path d="M154 124 Q160 130 166 124" stroke="#3f2e28" stroke-width="2.5" fill="none" stroke-linecap="round" />
+          </svg>
+        </div>
+        <h1>你家毛孩子<br />是哪种 MBTI？</h1>
+        <p class="hero-lead">
+          细数它的日常小行为，读懂毛孩子心底的小秘密
+        </p>
+        <div class="paw-row" aria-hidden="true">
+          <span class="paw">🐾</span><span class="paw">🐾</span><span class="paw">🐾</span><span class="paw">🐾</span>
+        </div>
+      </header>
+
+      <div class="cta-wrap">
+        <a class="btn btn-primary" href="choose-pet.html">开始</a>
+      </div>
+
+      <p class="footer-note">结果仅供娱乐 · 不构成行为或训练建议</p>
+    </div>
+  </body>
+</html>
