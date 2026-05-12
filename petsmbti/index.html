@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>萌宠 MBTI 测试 · 猫咪/狗狗/鹦鹉 16 型人格在线测试</title>
+  <meta name="description"
+    content="萌宠 MBTI 在线测试：用 24 道题读懂你家毛孩子的 16 种人格类型。支持猫咪、狗狗、鹦鹉三种宠物，免费、匿名、即测即得。" />
+  <meta name="keywords" content="萌宠MBTI,宠物MBTI,猫咪人格测试,狗狗性格测试,鹦鹉性格,宠物性格,MBTI测试,毛孩子" />
+  <meta name="author" content="funsite.online" />
+  <meta name="theme-color" content="#e6ac4c" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://petsmbti.funsite.online/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="萌宠 MBTI" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta property="og:title" content="萌宠 MBTI 测试 · 猫咪/狗狗/鹦鹉 16 型人格" />
+  <meta property="og:description" content="24 道题读懂你家毛孩子的性格。猫咪、狗狗、鹦鹉各 16 种 MBTI 类型，免费在线测试。" />
+  <meta property="og:url" content="https://petsmbti.funsite.online/" />
+  <meta property="og:image" content="https://petsmbti.funsite.online/og/home.svg" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="萌宠 MBTI 测试 · 猫咪/狗狗/鹦鹉 16 型人格" />
+  <meta name="twitter:description" content="24 道题读懂你家毛孩子的性格。猫咪、狗狗、鹦鹉各 16 种 MBTI 类型，免费在线测试。" />
+  <meta name="twitter:image" content="https://petsmbti.funsite.online/og/home.svg" />
+
+  <!-- Favicons -->
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Webmaster verifications (fill after申请) -->
+  <meta name="google-site-verification" content="" />
+  <meta name="baidu-site-verification" content="" />
+  <meta name="msvalidate.01" content="" />
+  <meta name="sogou_site_verification" content="" />
+  <meta name="360-site-verification" content="" />
+  <meta name="shenma-site-verification" content="" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/pets-theme.css" />
+
+  <!-- JSON-LD: WebSite + Organization -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://petsmbti.funsite.online/#website",
+          "url": "https://petsmbti.funsite.online/",
+          "name": "萌宠 MBTI",
+          "description": "猫咪 / 狗狗 / 鹦鹉 16 型人格在线测试",
+          "inLanguage": "zh-CN",
+          "publisher": { "@id": "https://funsite.online/#org" }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://funsite.online/#org",
+          "name": "funsite.online",
+          "url": "https://funsite.online/",
+          "sameAs": [
+            "https://www.xiaohongshu.com/",
+            "https://www.douyin.com/"
+          ]
+        }
+      ]
+    }
+  </script>
+  <style>
+    .hero {
+      text-align: center;
+      padding: 0.5rem 0 1rem;
+    }
+
+    .hero-illus {
+      margin: 0 auto 1rem;
+      max-width: 320px;
+      height: 280px;
+      position: relative;
+      overflow: visible;
+    }
+
+    /* === Cat & Dog duo === */
+    .petduo {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      padding-bottom: 1.25rem;
+    }
+
+    /* soft glow halo behind the pair */
+    .petduo::before {
+      content: '';
+      position: absolute;
+      top: 45%;
+      left: 50%;
+      width: 260px;
+      height: 200px;
+      margin-left: -130px;
+      margin-top: -110px;
+      background: radial-gradient(ellipse at center,
+          rgba(255, 210, 150, 0.55) 0%,
+          rgba(255, 210, 150, 0.25) 40%,
+          rgba(255, 210, 150, 0) 70%);
+      border-radius: 50%;
+      z-index: 0;
+      animation: petduo-pulse 4s ease-in-out infinite;
+    }
+
+    /* ground shadow */
+    .petduo::after {
+      content: '';
+      position: absolute;
+      bottom: 0.9rem;
+      left: 50%;
+      width: 220px;
+      height: 14px;
+      margin-left: -110px;
+      background: radial-gradient(ellipse at center,
+          rgba(108, 64, 24, 0.22) 0%,
+          rgba(108, 64, 24, 0) 70%);
+      z-index: 0;
+    }
+
+    .petduo-pet {
+      position: relative;
+      width: 130px;
+      height: 160px;
+      z-index: 2;
+    }
+
+    .petduo-cat {
+      animation: petduo-bob 3.4s ease-in-out infinite;
+    }
+
+    .petduo-dog {
+      transform: scaleX(-1);
+      animation: petduo-bob 3.4s ease-in-out infinite 0.55s;
+    }
+
+    /* heart between them */
+    .petduo-heart {
+      position: absolute;
+      top: 28%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.4rem;
+      z-index: 3;
+      filter: drop-shadow(0 2px 4px rgba(255, 80, 110, 0.35));
+      animation: petduo-heart 1.6s ease-in-out infinite;
+    }
+
+    /* floating sparkles / paws */
+    .petduo-deco {
+      position: absolute;
+      z-index: 1;
+      font-size: 0.9rem;
+      opacity: 0.75;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .petduo-deco.d1 { top: 12%; left: 14%; animation: petduo-float 5s ease-in-out infinite; }
+    .petduo-deco.d2 { top: 18%; right: 12%; font-size: 0.75rem; animation: petduo-float 5.5s ease-in-out infinite 0.8s; }
+    .petduo-deco.d3 { bottom: 30%; left: 6%; font-size: 0.7rem; animation: petduo-float 6s ease-in-out infinite 1.4s; }
+    .petduo-deco.d4 { top: 8%; left: 48%; font-size: 0.8rem; animation: petduo-float 4.5s ease-in-out infinite 2s; }
+    .petduo-deco.d5 { bottom: 26%; right: 8%; animation: petduo-float 5s ease-in-out infinite 1.1s; }
+
+    @keyframes petduo-bob {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-6px); }
+    }
+
+    /* dog is mirrored, so bob needs to preserve scaleX(-1) */
+    .petduo-dog {
+      animation-name: petduo-bob-mirror;
+    }
+
+    @keyframes petduo-bob-mirror {
+      0%, 100% { transform: scaleX(-1) translateY(0); }
+      50%      { transform: scaleX(-1) translateY(-6px); }
+    }
+
+    @keyframes petduo-heart {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50%      { transform: translate(-50%, -62%) scale(1.15); }
+    }
+
+    @keyframes petduo-pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.7; transform: scale(1.08); }
+    }
+
+    @keyframes petduo-float {
+      0%, 100% { transform: translateY(0) rotate(-4deg); opacity: 0.75; }
+      50%      { transform: translateY(-10px) rotate(6deg); opacity: 1; }
+    }
+
+    /* === Scoped cat/dog CSS === */
+    .petduo .body {
+      position: absolute;
+      width: 90px;
+      height: 100px;
+    }
+    .petduo .body::before,
+    .petduo .body::after,
+    .petduo .face::before,
+    .petduo .face::after,
+    .petduo .features::before,
+    .petduo .features::after {
+      content: '';
+      position: absolute;
+    }
+    .petduo .face,
+    .petduo .features { position: absolute; }
+
+    .petduo .bodySlant {
+      border-radius: 4px;
+      transform-origin: 50% 100%;
+      transform: perspective(300px) rotateX(20deg);
+    }
+
+    /* Cat */
+    .petduo .cat {
+      top: 40px;
+      left: 20px;
+      background-color: #e6ac4c;
+    }
+    .petduo .cat.earsBasic::before,
+    .petduo .cat.earsBasic::after {
+      width: 0;
+      height: 0;
+      top: -25px;
+      border-top: 28px solid transparent;
+      border-bottom: 20px solid transparent;
+    }
+    .petduo .cat.earsBasic::before {
+      border-left: 20px solid #e6ac4c;
+      left: 0;
+    }
+    .petduo .cat.earsBasic::after {
+      border-right: 20px solid #e6ac4c;
+      right: 0;
+    }
+    .petduo .cat .face {
+      top: 22px;
+      left: 20px;
+      width: 6px;
+      height: 6px;
+      background-color: #000;
+      border-radius: 50%;
+      box-shadow: 44px 0 #000;
+      animation: sc-blink 8s infinite linear;
+    }
+    .petduo .cat .face::before,
+    .petduo .cat .face::after {
+      top: 14px;
+      left: 6px;
+      z-index: 5;
+      width: 16px;
+      height: 20px;
+      border-radius: 50% / 40%;
+      border-right: 2px solid #000;
+      border-bottom: 2px solid #000;
+      border-left: 2px solid transparent;
+      border-top: 2px solid transparent;
+      box-shadow: 0 0 #000;
+    }
+    .petduo .cat .face::after {
+      left: 24px;
+      transform: rotateY(180deg);
+    }
+    .petduo .cat .features {
+      top: 44px;
+      left: 11px;
+      width: 20px;
+      height: 1px;
+      background-color: #000;
+      box-shadow: 0 5px #000, 48px 0 #000, 48px 5px #000;
+    }
+    .petduo .cat .features::after {
+      left: 30px;
+      top: -6px;
+      width: 6px;
+      height: 6px;
+      background-color: #000;
+      border-radius: 50%;
+      box-shadow: 2px 0 #000, 1px 1px #000;
+    }
+    .petduo .cat .features::before {
+      top: 10px;
+      left: 74px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 5px solid #e6ac4c;
+      border-left: 0;
+      border-top: 0;
+    }
+
+    @keyframes sc-blink {
+      32% { height: 6px; }
+      38% { height: 1px; }
+      42% { height: 1px; }
+      48% { height: 6px; }
+    }
+
+    /* Dog */
+    .petduo .dog {
+      top: 40px;
+      left: 20px;
+      background-color: #a3701d;
+    }
+    .petduo .dog.earsBasic::before {
+      top: -28px;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 30px solid #a3701d;
+      border-radius: 30% 0 0 / 40% 40% 0 0;
+      border-top: 28px solid transparent;
+      border-bottom: 20px solid transparent;
+    }
+    .petduo .dog.earsBasic::after {
+      top: -25px;
+      right: 0;
+      z-index: -5;
+      width: 0;
+      height: 0;
+      border-right: 30px solid #a3701d;
+      border-radius: 0 15px 0 0;
+      border-top: 28px solid transparent;
+      border-bottom: 20px solid transparent;
+    }
+    .petduo .dog .face {
+      top: 22%;
+      left: 22%;
+      width: 6px;
+      height: 6px;
+      background-color: #000;
+      border-radius: 50%;
+      box-shadow:
+        44px 0 #000,
+        19px 15px #000,
+        21px 15px #000,
+        23px 15px #000,
+        25px 15px #000,
+        22px 18px #000;
+    }
+    .petduo .dog .face::before,
+    .petduo .dog .face::after {
+      top: 14px;
+      left: 6px;
+      width: 16px;
+      height: 20px;
+      border-radius: 50% / 40%;
+      border-right: 2px solid #000;
+      border-bottom: 2px solid #000;
+      border-left: 2px solid transparent;
+      border-top: 2px solid transparent;
+      box-shadow: 0 0 #000;
+    }
+    .petduo .dog .face::after {
+      left: 24px;
+      transform: rotateY(180deg);
+    }
+    .petduo .dog .features {
+      right: 6px;
+      top: 5px;
+      z-index: -1;
+      width: 30px;
+      height: 35px;
+      background-color: #d6d6d6;
+      border-radius: 50% 40% 40% 50% / 30% 30% 30% 30%;
+    }
+    .petduo .dog .features::after {
+      top: 51px;
+      right: 34px;
+      width: 10px;
+      height: 10px;
+      background-color: #df4f4f;
+      border-radius: 0 0 50% 50%;
+      animation: sc-tongue 1s infinite ease-in;
+    }
+    .petduo .dog .features::before {
+      top: 35px;
+      right: -35px;
+      z-index: -1;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 5px solid #a3701d;
+      border-left: 0;
+      border-top: 0;
+      box-shadow:
+        3px 0 #f1f1f1,
+        6px 5px #a3701d,
+        9px 5px #f1f1f1,
+        10px 12px #a3701d;
+      animation: sc-wag 5s infinite ease-in-out;
+    }
+
+    @keyframes sc-tongue {
+      0%  { height: 10px; }
+      50% { height: 13px; }
+    }
+
+    @keyframes sc-wag {
+      10% { top: 25px; right: -30px; transform: rotate(-20deg); }
+      20% { top: 35px; right: -35px; transform: rotate(0); }
+      30% { top: 25px; right: -30px; transform: rotate(-20deg); }
+      40% { top: 35px; right: -35px; transform: rotate(0); }
+      50% { top: 30px; right: -32px; transform: rotate(-10deg); }
+      60% { top: 35px; right: -35px; transform: rotate(0); }
+    }
+
+    .hero h1 {
+      font-size: clamp(1.75rem, 5vw, 2.35rem);
+      color: var(--orange-600);
+      margin: 0 0 0.5rem;
+      line-height: 1.2;
+    }
+
+    .hero-lead {
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+      line-height: 1.65;
+      margin: 0 auto 1.75rem;
+      max-width: 34rem;
+    }
+
+    .cta-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .pick-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 560px) {
+      .pick-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .pick-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 1.35rem 1rem;
+      border: 3px solid var(--orange-100);
+      box-shadow: var(--shadow-card);
+      transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+      text-align: center;
+    }
+
+    .pick-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--orange-300);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .pick-emoji {
+      font-size: 3rem;
+      line-height: 1;
+      margin-bottom: 0.35rem;
+    }
+
+    .pick-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: var(--orange-600);
+      margin: 0 0 0.35rem;
+    }
+
+    .pick-card p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      line-height: 1.45;
+    }
+
+    .section-title {
+      margin: 0 0 1rem;
+      font-size: 1.35rem;
+      color: var(--orange-600);
+      text-align: center;
+      font-family: var(--font-display);
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-wrap">
+    <a class="skip-link" href="#main">跳到主要内容</a>
+    <main id="main">
+    <div id="view-hero">
+      <header class="hero">
+        <div class="hero-illus" aria-hidden="true">
+          <div class="petduo">
+            <span class="petduo-deco d1">🐾</span>
+            <span class="petduo-deco d2">✨</span>
+            <span class="petduo-deco d3">🐾</span>
+            <span class="petduo-deco d4">✨</span>
+            <span class="petduo-deco d5">🐾</span>
+
+            <div class="petduo-pet petduo-cat">
+              <div class="cat body bodySlant earsBasic">
+                <div class="face"></div>
+                <div class="features"></div>
+              </div>
+            </div>
+
+            <div class="petduo-heart" aria-hidden="true">💛</div>
+
+            <div class="petduo-pet petduo-dog">
+              <div class="dog body bodySlant earsBasic">
+                <div class="face"></div>
+                <div class="features"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h1>你家毛孩子<br />是哪种 MBTI？</h1>
+        <p class="hero-lead">
+          细数它的日常小行为，读懂毛孩子心底的小秘密
+        </p>
+        <div class="paw-row" aria-hidden="true">
+          <span class="paw">🐾</span><span class="paw">🐾</span><span class="paw">🐾</span><span class="paw">🐾</span>
+        </div>
+      </header>
+
+      <div class="cta-wrap">
+        <button type="button" class="btn btn-primary" id="btn-start">开始</button>
+      </div>
+    </div><!-- /view-hero -->
+
+    <div id="view-pick" hidden>
+      <section id="pick-pet" class="card">
+        <h2 class="section-title">你要测哪一种毛孩子？</h2>
+        <div class="pick-grid">
+          <a class="pick-card" href="quiz.html?pet=cat">
+            <div class="pick-emoji" aria-hidden="true">🐱</div>
+            <h2>猫咪</h2>
+            <p>呼噜、贴贴、沙发底社交现场，解锁独特猫格。</p>
+          </a>
+          <a class="pick-card" href="quiz.html?pet=dog">
+            <div class="pick-emoji" aria-hidden="true">🐶</div>
+            <h2>狗狗</h2>
+            <p>遛弯、飞盘、尾巴雷达，看看修勾的狗格底色。</p>
+          </a>
+          <a class="pick-card" href="quiz.html?pet=parrot">
+            <div class="pick-emoji" aria-hidden="true">🦜</div>
+            <h2>鹦鹉</h2>
+            <p>喳喳、贴贴、笼内探险家，鸟宝也要有鸟格名片。</p>
+          </a>
+        </div>
+      </section>
+    </div><!-- /view-pick -->
+
+    </main>
+
+    <div class="footer-social" role="group" aria-label="funsite.online · 作者社交账号：小红书 No, But? · 抖音 泥莫斯叭">
+      <div class="footer-social__site-line">
+        <span class="footer-social__site">funsite.online</span>
+      </div>
+      <div class="footer-social__accounts">
+        <span class="footer-social__line">
+          <svg class="footer-social__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor"
+              d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H6V4h5v7l2.5-1.5L16 11V4h2v16z" />
+          </svg>
+          <span>No, But?</span>
+        </span>
+        <span class="footer-social__sep" aria-hidden="true">·</span>
+        <span class="footer-social__line">
+          <svg class="footer-social__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor"
+              d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+          </svg>
+          <span>泥莫斯叭</span>
+        </span>
+      </div>
+    </div>
+    <p class="footer-note">结果仅供娱乐 · 不构成行为或训练建议</p>
+  </div>
+  <script>
+    (function () {
+      var viewHero = document.getElementById('view-hero');
+      var viewPick = document.getElementById('view-pick');
+      var btnStart = document.getElementById('btn-start');
+      function showPick() {
+        viewHero.hidden = true;
+        viewPick.hidden = false;
+        window.scrollTo(0, 0);
+      }
+      btnStart.addEventListener('click', showPick);
+      if (location.hash === '#pick-pet') showPick();
+    })();
+  </script>
+</body>
+
+</html>
