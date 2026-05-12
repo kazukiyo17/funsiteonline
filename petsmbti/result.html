@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>测试结果 · 萌宠 MBTI</title>
+  <meta name="description" content="你的毛孩子是哪种 MBTI？查看 16 型人格之一的结果解读，生成专属分享卡片。" />
+  <meta name="keywords" content="宠物MBTI结果,猫咪MBTI,狗狗MBTI,鹦鹉人格,宠物性格" />
+  <meta name="theme-color" content="#e6ac4c" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://petsmbti.funsite.online/result.html" />
+
+  <!-- Open Graph (由 EdgeOne Functions 按 pet/type 覆盖) -->
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="萌宠 MBTI" />
+  <meta property="og:locale" content="zh_CN" />
+  <meta property="og:title" content="萌宠 MBTI 测试结果" />
+  <meta property="og:description" content="16 型宠物人格解读 + 专属分享卡片。" />
+  <meta property="og:url" content="https://petsmbti.funsite.online/result.html" />
+  <meta property="og:image" content="https://petsmbti.funsite.online/og/home.svg" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="萌宠 MBTI 测试结果" />
+  <meta name="twitter:description" content="16 型宠物人格解读 + 专属分享卡片。" />
+  <meta name="twitter:image" content="https://petsmbti.funsite.online/og/home.svg" />
+
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="fetch" href="data/pets-mbti.json" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/pets-theme.css" />
+
+  <!-- JSON-LD (由 EdgeOne Functions 按 pet/type 覆盖) -->
+  <script type="application/ld+json" id="ld-article">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "萌宠 MBTI 测试结果",
+      "description": "16 型宠物人格解读",
+      "inLanguage": "zh-CN",
+      "isPartOf": { "@id": "https://petsmbti.funsite.online/#website" }
+    }
+  </script>
+  <style>
+    .result-hero {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .result-tagline {
+      margin: 0 0 0.35rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--orange-600);
+      text-transform: uppercase;
+    }
+
+    .type-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      margin: 0.35rem 0 0.75rem;
+    }
+
+    .big-type {
+      font-family: var(--font-display);
+      font-size: clamp(2.35rem, 9vw, 3.35rem);
+      font-weight: 600;
+      color: var(--orange-600);
+      letter-spacing: 0.14em;
+      margin: 0;
+      padding: 0.2rem 1rem;
+      text-shadow: 2px 2px 0 var(--orange-200);
+      background: linear-gradient(180deg, var(--white) 0%, var(--orange-50) 100%);
+      border-radius: var(--radius-md);
+      border: 3px solid var(--orange-200);
+      box-shadow: var(--shadow-card);
+    }
+
+    .nickname {
+      font-size: clamp(1.15rem, 4vw, 1.45rem);
+      font-weight: 700;
+      color: var(--ink);
+      margin: 0;
+      line-height: 1.35;
+      max-width: 22rem;
+    }
+
+    .result-story {
+      margin: 0;
+      padding: 1.15rem 1.2rem 1.25rem;
+      background: linear-gradient(165deg, var(--orange-50) 0%, var(--white) 55%, var(--cream) 100%);
+      border-radius: var(--radius-md);
+      border: 2px solid var(--orange-100);
+      border-left: 5px solid var(--orange-400);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .result-story-label {
+      margin: 0 0 0.65rem;
+      font-family: var(--font-display);
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--orange-600);
+      letter-spacing: 0.04em;
+    }
+
+    .blurb-dim {
+      margin: 0 0 0.9rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px dashed var(--orange-200);
+      font-size: 0.84rem;
+      line-height: 1.65;
+      color: var(--ink-soft);
+      overflow-wrap: anywhere;
+    }
+
+    .blurb-dim[hidden] {
+      display: none !important;
+    }
+
+    .blurb-main {
+      margin: 0;
+      font-size: 1.02rem;
+      line-height: 1.88;
+      color: var(--ink);
+      overflow-wrap: anywhere;
+      text-wrap: pretty;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+
+    .empty-state {
+      text-align: center;
+    }
+
+    .empty-state p {
+      color: var(--ink-soft);
+      line-height: 1.65;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-wrap">
+    <div id="has-result" class="card" hidden>
+      <div style="text-align: center; margin-bottom: 0.75rem">
+        <span class="pet-badge" id="pet-badge">🐾</span>
+      </div>
+      <div class="result-hero">
+        <div class="paw-row" aria-hidden="true"><span class="paw">🐾</span><span class="paw">✨</span><span
+            class="paw">🐾</span></div>
+        <p class="result-tagline">你家毛孩子的 MBTI</p>
+        <div class="type-stack">
+          <p class="big-type" id="type-code">————</p>
+          <p class="nickname" id="type-nick"></p>
+        </div>
+      </div>
+      <article class="result-story" id="result-story" aria-label="类型解读">
+        <p class="result-story-label">性格解读</p>
+        <p class="blurb-dim" id="blurb-dim" hidden></p>
+        <p class="blurb-main" id="blurb-main"></p>
+      </article>
+      <div class="actions">
+        <a class="btn btn-ghost" href="share.html">生成卡片</a>
+        <a class="btn btn-primary" href="index.html">再测一次</a>
+      </div>
+    </div>
+
+    <div id="no-result" class="card empty-state" hidden>
+      <div class="pick-emoji" style="font-size: 3rem" aria-hidden="true">🐾</div>
+      <h1 style="color: var(--orange-600); font-size: 1.35rem">还没有结果哦</h1>
+      <p>请先完成问卷，结果会自动出现在这一页。若你清除了浏览器数据，需要重新答题。</p>
+      <a class="btn btn-primary" href="index.html#pick-pet">去选择宠物类型</a>
+    </div>
+
+    <div class="footer-social" role="group" aria-label="funsite.online · 作者社交账号：小红书 No, But? · 抖音 泥莫斯叭">
+      <div class="footer-social__site-line">
+        <span class="footer-social__site">funsite.online</span>
+      </div>
+      <div class="footer-social__accounts">
+        <span class="footer-social__line">
+          <svg class="footer-social__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor"
+              d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H6V4h5v7l2.5-1.5L16 11V4h2v16z" />
+          </svg>
+          <span>No, But?</span>
+        </span>
+        <span class="footer-social__sep" aria-hidden="true">·</span>
+        <span class="footer-social__line">
+          <svg class="footer-social__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor"
+              d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+          </svg>
+          <span>泥莫斯叭</span>
+        </span>
+      </div>
+    </div>
+    <p class="footer-note">结果仅供娱乐 · 不构成行为或训练建议</p>
+  </div>
+
+  <script src="js/load-config.js"></script>
+  <script>
+    (function () {
+      var STORAGE_KEY = "petsmbti_result_v1";
+      var raw = null;
+      try {
+        raw = localStorage.getItem(STORAGE_KEY);
+      } catch (e) { }
+      var elHas = document.getElementById("has-result");
+      var elNo = document.getElementById("no-result");
+      if (!raw) {
+        elNo.hidden = false;
+        return;
+      }
+      var data;
+      try {
+        data = JSON.parse(raw);
+      } catch (e) {
+        elNo.hidden = false;
+        return;
+      }
+      if (!data || !data.code || !data.pet) {
+        elNo.hidden = false;
+        return;
+      }
+
+      loadPetsMbtiConfig()
+        .then(function () {
+          var pack = window.PETS_MBTI_QUESTIONS[data.pet];
+          var titles = window.PETS_MBTI_RESULTS.titles[data.pet];
+          var blurbs = window.PETS_MBTI_RESULTS.blurbs[data.pet];
+          if (!pack || !titles || !blurbs) {
+            elNo.hidden = false;
+            return;
+          }
+
+          elHas.hidden = false;
+          document.getElementById("pet-badge").textContent = pack.emoji + " " + pack.petLabel + " · MBTI";
+          document.getElementById("type-code").textContent = data.code;
+          document.getElementById("type-nick").textContent = titles[data.code] || "神秘毛孩子";
+
+          var rawBlurb = blurbs[data.code] || "暂无该类型的扩展文案。";
+          var sep = "——";
+          var j = rawBlurb.indexOf(sep);
+          var elDim = document.getElementById("blurb-dim");
+          var elMain = document.getElementById("blurb-main");
+          if (j !== -1) {
+            elDim.textContent = rawBlurb.slice(0, j).trim();
+            elDim.hidden = false;
+            elMain.textContent = rawBlurb.slice(j + sep.length).trim();
+          } else {
+            elDim.textContent = "";
+            elDim.hidden = true;
+            elMain.textContent = rawBlurb;
+          }
+        })
+        .catch(function (err) {
+          elHas.hidden = true;
+          elNo.hidden = false;
+          var p = elNo.querySelector("p");
+          if (p) {
+            p.textContent =
+              "结果配置加载失败（请用本地静态服务器打开，勿使用 file://）。 " + (err && err.message ? err.message : String(err));
+          }
+        });
+    })();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "萌宠 MBTI",
+  "short_name": "萌宠 MBTI",
+  "description": "猫咪 / 狗狗 / 鹦鹉 16 型人格在线测试",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff8f3",
+  "theme_color": "#e6ac4c",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

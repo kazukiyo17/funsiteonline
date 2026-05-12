@@ -1,0 +1,27 @@
+# robots.txt for https://petsmbti.funsite.online
+
+User-agent: *
+Allow: /
+Disallow: /stats.html
+Disallow: /api/
+
+# 显式允许常见搜索引擎爬虫
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: Sogou web spider
+Allow: /
+
+User-agent: 360Spider
+Allow: /
+
+User-agent: YisouSpider
+Allow: /
+
+Sitemap: https://petsmbti.funsite.online/sitemap.xml
