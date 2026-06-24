@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Laufey 人格主题曲测试：十六题四选一。" />
+  <title>作答中 · Laufey Soul Spectrum</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #faf7f2;
+      --cream-deep: #f3ebe3;
+      --caramel: #8b7355;
+      --caramel-deep: #6d5844;
+      --peach-soft: rgba(232, 196, 184, 0.38);
+      --mint: #9eb8aa;
+      --mint-soft: rgba(158, 184, 170, 0.22);
+      --gold-line: rgba(196, 165, 116, 0.42);
+      --ink: #3d3834;
+      --ink-soft: rgba(61, 56, 52, 0.58);
+      --radius-lg: clamp(18px, 4vw, 22px);
+      --radius-sm: 14px;
+      --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.085'/%3E%3C/svg%3E");
+      --grain-fine: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.15' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)' opacity='0.04'/%3E%3C/svg%3E");
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100dvh;
+      font-family: "Nunito", system-ui, sans-serif;
+      font-weight: 500;
+      color: var(--ink);
+      background-color: var(--cream-deep);
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 90% 65% at 50% -5%, var(--peach-soft), transparent 55%),
+        radial-gradient(ellipse 48% 36% at 105% 75%, var(--mint-soft), transparent 50%),
+        linear-gradient(172deg, var(--cream) 0%, var(--cream-deep) 55%, #ebe3d9 100%);
+      filter: saturate(0.93) contrast(0.97);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      background:
+        var(--grain),
+        var(--grain-fine),
+        repeating-linear-gradient(93deg, transparent 0, transparent 13px, rgba(107, 88, 68, 0.016) 13px, rgba(107, 88, 68, 0.016) 14px),
+        radial-gradient(ellipse 88% 72% at 50% 48%, transparent 42%, rgba(61, 56, 52, 0.055) 100%);
+    }
+
+    .shell {
+      position: relative;
+      z-index: 2;
+      max-width: 28rem;
+      margin: 0 auto;
+      padding: clamp(1.25rem, 4vw, 2rem) clamp(1rem, 3.5vw, 1.35rem) 2.5rem;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .quiz-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(168deg, rgba(255, 255, 255, 0.78) 0%, rgba(250, 247, 242, 0.92) 100%);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--gold-line);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.88) inset,
+        0 24px 48px -22px rgba(61, 56, 52, 0.14);
+      padding: clamp(1.35rem, 4vw, 1.75rem);
+    }
+
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(196, 165, 116, 0.28);
+    }
+
+    .back {
+      color: var(--caramel-deep);
+      text-decoration: none;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .back:hover { text-decoration: underline; }
+
+    .count {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--ink-soft);
+    }
+
+    .count strong {
+      color: var(--caramel-deep);
+      font-weight: 700;
+    }
+
+    .bar-wrap {
+      width: 100%;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(158, 184, 170, 0.15);
+      border: 1px solid rgba(196, 165, 116, 0.25);
+      margin-bottom: 1.65rem;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--mint) 0%, #b8d4c4 40%, var(--caramel) 100%);
+      transition: width 0.35s ease;
+      box-shadow: 0 0 16px rgba(232, 196, 184, 0.35);
+    }
+
+    .q-head {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--caramel);
+      margin-bottom: 0.55rem;
+    }
+
+    .q-stem {
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1.22rem, 4.2vw, 1.42rem);
+      font-weight: 500;
+      line-height: 1.48;
+      margin-bottom: 1.45rem;
+      color: var(--caramel-deep);
+    }
+
+    .opts {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      flex: 1;
+    }
+
+    .opt {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 1rem 1.05rem;
+      border: 1px solid rgba(196, 165, 116, 0.35);
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.55);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.45;
+      cursor: pointer;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.65) inset;
+      transition: border-color 0.15s ease, background 0.15s ease, transform 0.12s ease;
+    }
+
+    .opt:hover {
+      border-color: rgba(232, 196, 184, 0.85);
+      background: linear-gradient(175deg, rgba(255, 255, 255, 0.85) 0%, rgba(232, 196, 184, 0.18) 100%);
+    }
+
+    .opt:active { transform: scale(0.992); }
+
+    .opt .k {
+      display: inline-block;
+      min-width: 1.45rem;
+      font-weight: 700;
+      color: var(--caramel-deep);
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: 1.05rem;
+    }
+
+    .nav-row {
+      margin-top: 1.5rem;
+      padding-top: 1.15rem;
+      border-top: 1px solid rgba(196, 165, 116, 0.22);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-ghost {
+      background: none;
+      border: none;
+      color: var(--caramel-deep);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      padding: 0.45rem 0;
+    }
+
+    .btn-ghost:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .hint {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      letter-spacing: 0.03em;
+    }
+
+    [hidden] { display: none !important; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bar-fill { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="quiz-card">
+      <div class="top">
+        <a class="back" href="index.html">← 首页</a>
+        <span class="count" id="q-count" aria-live="polite"
+          >第 <strong id="q-num">1</strong> / <strong>16</strong> 题</span>
+      </div>
+      <div class="bar-wrap" role="progressbar" aria-valuemin="1" aria-valuemax="16" aria-valuenow="1" id="q-progress-wrap">
+        <div class="bar-fill" id="q-bar" aria-hidden="true"></div>
+      </div>
+
+      <p class="q-head">Questionnaire</p>
+      <h1 class="q-stem" id="q-stem">加载中…</h1>
+      <div class="opts" id="q-opts" role="listbox" aria-label="请选择一项"></div>
+      <div class="nav-row">
+        <button type="button" class="btn-ghost" id="btn-prev" disabled>上一题</button>
+        <span class="hint" id="q-hint">点选一项继续</span>
+        <span style="width:3.25rem"></span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var KEY = "lauver_quiz_v1";
+      var TOTAL = 16;
+
+      var QUIZ = [
+        { text: "面对回忆，你更倾向？", options: [
+          { key: "A", label: "反复回味、沉溺旧时光" },
+          { key: "B", label: "提取浪漫、怀念温柔瞬间" },
+          { key: "C", label: "理性旁观、不被回忆裹挟" },
+          { key: "D", label: "果断翻篇、专注当下自我" }
+        ]},
+        { text: "你的爱情观底色？", options: [
+          { key: "A", label: "念旧长情，爱里带着遗憾" },
+          { key: "B", label: "浪漫纯粹，永远相信心动" },
+          { key: "C", label: "克制谨慎，爱得清醒自持" },
+          { key: "D", label: "敢爱敢恨，不爱就及时止损" }
+        ]},
+        { text: "独处时的状态？", options: [
+          { key: "A", label: "沉浸思绪，和过往情绪对话" },
+          { key: "B", label: "放空幻想，编织浪漫小世界" },
+          { key: "C", label: "规律放空，维持内心秩序" },
+          { key: "D", label: "自我滋养，专注提升自我" }
+        ]},
+        { text: "遭遇低谷，你的反应？", options: [
+          { key: "A", label: "陷入情绪，允许自己沉沦低落" },
+          { key: "B", label: "寻找浪漫，用美好治愈自己" },
+          { key: "C", label: "理性自愈，寻找希望微光" },
+          { key: "D", label: "倔强不服，越挫越勇自我觉醒" }
+        ]},
+        { text: "你最害怕的事？", options: [
+          { key: "A", label: "失去回忆、被世界遗忘" },
+          { key: "B", label: "失去爱意、变得麻木冷漠" },
+          { key: "C", label: "生活失控、秩序被打乱" },
+          { key: "D", label: "自我妥协、活成别人期待" }
+        ]},
+        { text: "理想的生活节奏？", options: [
+          { key: "A", label: "慢下来，沉溺温柔旧梦" },
+          { key: "B", label: "随心走，追逐浪漫心动" },
+          { key: "C", label: "按部就班，稳定有序" },
+          { key: "D", label: "自由随性，掌控自我人生" }
+        ]},
+        { text: "面对他人评价？", options: [
+          { key: "A", label: "敏感在意，容易自我内耗" },
+          { key: "B", label: "温柔包容，擅长共情他人" },
+          { key: "C", label: "冷静审视，理性筛选信息" },
+          { key: "D", label: "完全无视，内核极度稳定" }
+        ]},
+        { text: "对待遗憾与错过？", options: [
+          { key: "A", label: "耿耿于怀，长久无法释怀" },
+          { key: "B", label: "温柔和解，珍藏美好瞬间" },
+          { key: "C", label: "理性复盘，吸取成长教训" },
+          { key: "D", label: "果断放下，绝不回头消耗" }
+        ]},
+        { text: "你的浪漫风格？", options: [
+          { key: "A", label: "复古怀旧，氛围感忧郁浪漫" },
+          { key: "B", label: "细腻温柔，治愈系爵士浪漫" },
+          { key: "C", label: "含蓄克制，细水长流的浪漫" },
+          { key: "D", label: "热烈张扬，忠于自我的浪漫" }
+        ]},
+        { text: "面对孤独？", options: [
+          { key: "A", label: "在孤独里和过去和解" },
+          { key: "B", label: "在孤独里创造浪漫" },
+          { key: "C", label: "在孤独里维持内心秩序" },
+          { key: "D", label: "在孤独里完成自我成长" }
+        ]},
+        { text: "对待承诺与约定？", options: [
+          { key: "A", label: "执念坚守，困在过往承诺" },
+          { key: "B", label: "温柔守护，用心经营约定" },
+          { key: "C", label: "谨慎许诺，坚守理性底线" },
+          { key: "D", label: "随心而动，尊重自我感受" }
+        ]},
+        { text: "你最欣赏的人格？", options: [
+          { key: "A", label: "深情温柔、念旧长情" },
+          { key: "B", label: "浪漫通透、共情治愈" },
+          { key: "C", label: "冷静克制、自律清醒" },
+          { key: "D", label: "独立自信、独特张扬" }
+        ]},
+        { text: "面对外界变化？", options: [
+          { key: "A", label: "抗拒改变，怀念熟悉过往" },
+          { key: "B", label: "接纳变化，寻找新浪漫" },
+          { key: "C", label: "适应变化，维持内心稳定" },
+          { key: "D", label: "主导变化，掌控人生方向" }
+        ]},
+        { text: "自我价值感来源？", options: [
+          { key: "A", label: "过往回忆、他人的怀念" },
+          { key: "B", label: "爱意共鸣、浪漫的瞬间" },
+          { key: "C", label: "自律成长、秩序的安全感" },
+          { key: "D", label: "自我认可、独立的内核" }
+        ]},
+        { text: "面对心动与喜欢？", options: [
+          { key: "A", label: "暗恋沉溺，默默收藏情绪" },
+          { key: "B", label: "温柔奔赴，传递浪漫心意" },
+          { key: "C", label: "克制试探，保持理性距离" },
+          { key: "D", label: "大胆表达，忠于自我感受" }
+        ]},
+        { text: "回望年少的自己？", options: [
+          { key: "A", label: "心疼从前，和过去温柔和解" },
+          { key: "B", label: "感恩纯粹，守护心底浪漫" },
+          { key: "C", label: "认可成长，感谢自律与坚持" },
+          { key: "D", label: "欣赏蜕变，骄傲自我觉醒" }
+        ]}
+      ];
+
+      var elStem = document.getElementById("q-stem");
+      var elOpts = document.getElementById("q-opts");
+      var elNum = document.getElementById("q-num");
+      var elBar = document.getElementById("q-bar");
+      var elPrev = document.getElementById("btn-prev");
+      var elProg = document.getElementById("q-progress-wrap");
+
+      var answers = [];
+      try {
+        var raw = sessionStorage.getItem(KEY);
+        if (raw) answers = JSON.parse(raw);
+        if (!Array.isArray(answers) || answers.length > TOTAL) answers = [];
+      } catch (e) {
+        answers = [];
+      }
+
+      if (typeof location.search === "string" && /[?&]new=1(?:&|$)/.test(location.search)) {
+        try {
+          sessionStorage.removeItem(KEY);
+        } catch (e2) {}
+        answers = [];
+        if (typeof history.replaceState === "function") {
+          history.replaceState(null, "", location.pathname || "quiz.html");
+        }
+      }
+
+      var idx = answers.length;
+
+      function save() {
+        try {
+          sessionStorage.setItem(KEY, JSON.stringify(answers));
+        } catch (e) {}
+      }
+
+      function setProgress(n) {
+        var cur = n + 1;
+        if (elNum) elNum.textContent = String(cur);
+        if (elBar) elBar.style.width = (cur / TOTAL) * 100 + "%";
+        if (elProg) {
+          elProg.setAttribute("aria-valuenow", String(cur));
+          elProg.setAttribute("aria-valuetext", "第 " + cur + " 题，共 " + TOTAL + " 题");
+        }
+        if (elPrev) elPrev.disabled = n <= 0;
+      }
+
+      function goResult() {
+        save();
+        window.location.href = "result.html";
+      }
+
+      function render() {
+        if (idx < 0) idx = 0;
+        if (idx >= TOTAL) {
+          goResult();
+          return;
+        }
+        var q = QUIZ[idx];
+        setProgress(idx);
+        if (elStem) elStem.textContent = (idx + 1) + ". " + q.text;
+        elOpts.innerHTML = "";
+        q.options.forEach(function (o) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "opt";
+          btn.setAttribute("role", "option");
+          var spanK = document.createElement("span");
+          spanK.className = "k";
+          spanK.textContent = o.key + ".";
+          btn.appendChild(spanK);
+          btn.appendChild(document.createTextNode(" " + o.label));
+          btn.addEventListener("click", function () {
+            answers[idx] = o.key;
+            save();
+            idx += 1;
+            if (idx >= TOTAL) {
+              goResult();
+              return;
+            }
+            render();
+            window.scrollTo(0, 0);
+          });
+          elOpts.appendChild(btn);
+        });
+      }
+
+      function goPrev() {
+        if (idx <= 0) return;
+        idx -= 1;
+        answers.pop();
+        save();
+        render();
+        window.scrollTo(0, 0);
+      }
+
+      if (elPrev) elPrev.addEventListener("click", goPrev);
+
+      if (idx >= TOTAL) {
+        goResult();
+      } else {
+        render();
+      }
+    })();
+  </script>
+</body>
+</html>
